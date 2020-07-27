@@ -4,72 +4,15 @@ import chromedriver_binary  # Adds chromedriver binary to path
 #from dateutil.parser import parse
 #from influxdb import InfluxDBClient
 import json
-import datetime
+from utils.logger import info, error, debug
+from helpers import api_url, get_uuid
 import time
-from urllib.parse import urlunsplit, urlencode
 import os
-import sys
-import re
-import logging
 
-def info(msg):
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            logging.FileHandler("logs/info.log"),
-            logging.StreamHandler(sys.stdout)
-        ]
-    )
-    logging.info(msg)
-def debug(msg):
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            logging.FileHandler("logs/debug.log"),
-            logging.StreamHandler(sys.stdout)
-        ]
-    )
-    logging.debug(msg)
-def error(msg):
-    logging.basicConfig(
-        level=logging.ERROR,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            logging.FileHandler("logs/error.log"),
-            logging.StreamHandler(sys.stdout)
-        ]
-    )
-    logging.error(msg)
 
 PECO_LOGIN_URL = os.environ.get('PECO_LOGIN_URL')
 PECO_USERNAME = os.environ.get('PECO_USERNAME')
 PECO_PASSWORD = os.environ.get('PECO_PASSWORD')
-START_DATE = os.environ.get('START_DATE')
-
-def get_today():
-    today = datetime.datetime.now().isoformat()
-    return today
-
-
-def to_timestamp(start):
-    timestamp = datetime.datetime.strptime(start, "%Y-%m-%d").isoformat()
-    return timestamp
-
-
-
-def api_url(account_id, start=to_timestamp(START_DATE),
-            end=get_today(),
-            agg_type='hour'):
-    scheme = 'https'
-    netloc = 'peco.opower.com'
-    path = f"/ei/edge/apis/DataBrowser-v1/cws/cost/utilityAccount/{account_id}"
-    query = urlencode(dict(startDate=start,endDate=end,aggregateType=agg_type))
-    return urlunsplit((scheme,netloc,path, query, ""))
-
-def get_uuid(txt):
-    return re.findall(r"\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b",txt)[0]
 
 
 def browser():

@@ -5,12 +5,14 @@ This is a WIP but with valid credentials, should get your data.
 
 
 ### Dev
-Setup Envs for 
+Used ENVs for variables as it's what I use in my docker server
 
 PECO_LOGIN_URL = https://secure.peco.com/Pages/Login.aspx
 
 PECO_USERNAME = *PECO LOGIN*
+
 PECO_PASSWORD = *PECO PASSWORD*
+
 START_DATE = 2020-07-01
 
 I have a file named ".env" in the root of the directory that looks like
