@@ -1,12 +1,32 @@
 # Peco Scraper
 
 An app that will scrape data from Peco. Exports to Infux. 
+This is a WIP but with valid credentials, should get your data. 
 
-installed python 3.7
-install chrome 
-apt-get update && apt-get upgrade
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo dpkg -i google-chrome-stable_current_amd64.deb
-sudo apt -f install                       # probably
-wget https://github.com/therealkenc/libudev-stub/releases/download/v0.9.0/libudev-stub-0.9.0-WSL.deb
-sudo dpkg -i libudev-stub-0.9.0-WSL.deb   # doing this **last** is important
+
+### Dev
+Setup Envs for 
+
+PECO_LOGIN_URL = https://secure.peco.com/Pages/Login.aspx
+
+PECO_USERNAME = *PECO LOGIN*
+PECO_PASSWORD = *PECO PASSWORD*
+START_DATE = 2020-07-01
+
+I have a file named ".env" in the root of the directory that looks like
+```env
+# Pages
+PECO_LOGIN_URL = https://secure.peco.com/Pages/Login.aspx
+
+# User Variables
+PECO_USERNAME = PECO USERNAME
+PECO_PASSWORD = PECO PASSWORD
+
+# Dates
+# date billing started or when data should generate starting
+START_DATE = 2020-07-01
+```
+
+
+
+
