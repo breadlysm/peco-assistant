@@ -22,29 +22,38 @@ def browser():
     caps['logPrefs'] = {'performance': 'ALL','enable_network': 'true'}
     return webdriver.Chrome(options = chrome_options, desired_capabilities=caps) 
 
+def login(driver):
+    # Access main login page. 
+    try:
+        driver.get(PECO_LOGIN_URL)
+        debug('Opened login page successfully')
+    except Exception as err:
+        error('Unable to open login page. Exiting.')
+        error(err)
+        driver.save_screenshot('screenshots/error-opening-login.png')
+        exit
+    return driver
+    # Username Input
+    try:
+        username = driver.find_elements_by_css_selector('#Username')[1]
+        
+        username.clear()
+        username.send_keys(PECO_USERNAME)
+        debug('input username successfully')
+    except Exception as err:
+        error('Error inputting username in.')
+        error(err)
+        error('screenshot of page saved')
+        driver.save_screenshot("screenshots/username-error.png")
+        exit
+
 driver = browser()
 info('Chrome driver initialized. Attempting Login')
-try:
-    driver.get(PECO_LOGIN_URL)
-    debug('Opened login page successfully')
-except Exception as err:
-    error('Unable to open login page')
-    error(err)
-    driver.save_screenshot('screenshots/error-opening-login.png')
-    exit
+
+
 
 # Username
-try:
-    username = driver.find_elements_by_css_selector('#Username')[1]
-    username.clear()
-    username.send_keys(PECO_USERNAME)
-    debug('input username successfully')
-except Exception as err:
-    error('Error inputting username in.')
-    error(err)
-    error('screenshot of page saved')
-    driver.save_screenshot("screenshots/username-error.png")
-    exit
+
 
 # Password
 try:
