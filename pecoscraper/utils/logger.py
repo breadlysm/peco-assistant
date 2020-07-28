@@ -6,7 +6,7 @@ def info(msg):
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler("logs/info.log"),
+            logging.FileHandler("log.log"),
             logging.StreamHandler(sys.stdout)
         ]
     )
@@ -16,7 +16,7 @@ def debug(msg):
         level=logging.DEBUG,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler("logs/debug.log"),
+            logging.FileHandler("log.log"),
             logging.StreamHandler(sys.stdout)
         ]
     )
@@ -26,7 +26,7 @@ def error(msg):
         level=logging.ERROR,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler("logs/error.log"),
+            logging.FileHandler("log.log"),
             logging.StreamHandler(sys.stdout)
         ]
     )
