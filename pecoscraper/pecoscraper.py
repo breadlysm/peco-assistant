@@ -22,6 +22,12 @@ def browser():
     caps['logPrefs'] = {'performance': 'ALL','enable_network': 'true'}
     return webdriver.Chrome(options = chrome_options, desired_capabilities=caps) 
 
+def find_inputs(driver,name):
+    for input in driver.find_elements_by_tag_name('input'):
+        if input.get_property('name') == name:
+            return input
+            pass
+
 def login(driver):
     # Access main login page. 
     driver.get(PECO_LOGIN_URL)
@@ -33,7 +39,7 @@ def login(driver):
         exit
     # Username Input
     try:
-        username = driver.find_element_by_css_selector('#Username')
+        username = find_inputs(driver,'Username')
     except NoSuchElementException:
         error("Username Element doesn't exist. Exiting")
         driver.save_screenshot("screenshots/username-error.png")
@@ -44,7 +50,7 @@ def login(driver):
 
     # Password
     try:
-        password = driver.find_element_by_css_selector('#Password')
+        password = find_inputs(driver,'Password')
     except NoSuchElementException:
         error("Password Element doesn't exist. Exiting")
         driver.save_screenshot("screenshots/password-error.png")
