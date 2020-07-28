@@ -24,58 +24,47 @@ def browser():
 
 def login(driver):
     # Access main login page. 
-    try:
-        driver.get(PECO_LOGIN_URL)
-        debug('Opened login page successfully')
-    except Exception as err:
-        error('Unable to open login page. Exiting.')
-        error(err)
+    driver.get(PECO_LOGIN_URL)
+    if driver.title == 'Login | PECO - An Exelon Company':
+        info('Opened Peco Login page')
+    else:
+        error('Unknown problem opening login page. Screenshot saved. Exiting')
         driver.save_screenshot('screenshots/error-opening-login.png')
         exit
-    return driver
     # Username Input
     try:
-        username = driver.find_elements_by_css_selector('#Username')[1]
-        
-        username.clear()
-        username.send_keys(PECO_USERNAME)
-        debug('input username successfully')
-    except Exception as err:
-        error('Error inputting username in.')
-        error(err)
-        error('screenshot of page saved')
+        username = driver.find_element_by_css_selector('#Username')
+    except NoSuchElementException:
+        error("Username Element doesn't exist. Exiting")
         driver.save_screenshot("screenshots/username-error.png")
         exit
+    username.clear()
+    username.send_keys(PECO_USERNAME)
+    input('input username successfully')
+
+    # Password
+    try:
+        password = driver.find_element_by_css_selector('#Password')
+    except NoSuchElementException:
+        error("Password Element doesn't exist. Exiting")
+        driver.save_screenshot("screenshots/password-error.png")
+        exit
+    password.clear()
+    password.send_keys(PECO_PASSWORD)
+
+    # Click Signin 
+    signin = driver.find_element_by_xpath('//*[@id="SignInController"]/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/button')
+    signin.click()
+    driver.save_screenshot("screenshots/submitted.png")
+    time.sleep(2)
+    info("Submitted login") 
+
+    return driver
+    
 
 driver = browser()
 info('Chrome driver initialized. Attempting Login')
-
-
-
-# Username
-
-
-# Password
-try:
-    #password = driver.find_element_by_css_selector('input[type=password')
-    password = driver.find_element_by_xpath('//*[@id="SignInController"]/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/div[2]/div/div/input')
-    password.clear()
-    password.send_keys(PECO_PASSWORD)
-    driver.save_screenshot("screenshots/password-input.png")
-    debug('input password successfully')
-except Exception as err:
-    error('Error inputting password.')
-    error(err)
-    error('screenshot of page saved')
-
-    driver.save_screenshot("screenshots/password-error.png")
-    exit
-        
-signin = driver.find_element_by_xpath('//*[@id="SignInController"]/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/button')
-signin.click()
-driver.save_screenshot("screenshots/submitted.png")
-time.sleep(2)
-info("Submitted login") 
+driver = login(driver)
 
 driver.save_screenshot("screenshots/login-submitted.png")
 driver.get('https://secure.peco.com/MyAccount/MyBillUsage/pages/secure/ViewMyUsage.aspx') # for some reason session doesn't initiate until this page.
