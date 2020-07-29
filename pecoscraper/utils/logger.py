@@ -1,6 +1,7 @@
 import logging
 import sys
 
+
 def info(msg):
     logging.basicConfig(
         level=logging.INFO,
@@ -11,6 +12,8 @@ def info(msg):
         ]
     )
     logging.info(msg)
+
+
 def debug(msg):
     logging.basicConfig(
         level=logging.DEBUG,
@@ -21,6 +24,8 @@ def debug(msg):
         ]
     )
     logging.debug(msg)
+
+
 def error(msg):
     logging.basicConfig(
         level=logging.ERROR,
