@@ -1,0 +1,7 @@
+*.log
+screenshots
+*.json
+.env
+*.code-workspace
+buildnotes.md
+*.pyc
