@@ -1,15 +1,16 @@
 import os
 from helpers import find_inputs
 from utils.logger import info, error, debug
+import time
 
-PECO_LOGIN_URL = os.environ.get('PECO_LOGIN_URL')
+
 PECO_USERNAME = os.environ.get('PECO_USERNAME')
 PECO_PASSWORD = os.environ.get('PECO_PASSWORD')
 
 
 def login(driver):
     # Access main login page.
-    driver.get(PECO_LOGIN_URL)
+    driver.get('https://secure.peco.com/Pages/Login.aspx')
     if driver.title == 'Login | PECO - An Exelon Company':
         info('Opened Peco Login page')
     else:
@@ -24,7 +25,7 @@ def login(driver):
     username.clear()
     username.send_keys(PECO_USERNAME)
     info('input username successfully')
-
+    time.sleep(1)
     # Password
     try:
         password = find_inputs(driver, 'Password')
@@ -33,8 +34,12 @@ def login(driver):
         exit
     password.clear()
     password.send_keys(PECO_PASSWORD)
+    time.sleep(1)
+    info('Input password successfully')
 
     # Click Signin
+    # Add ability to check that the user is successsfully signed in. 
+    info('Trying to submit sign in.')
     signin = driver.find_element_by_xpath(
         '//*[@id="SignInController"]/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/button')
     signin.click()
