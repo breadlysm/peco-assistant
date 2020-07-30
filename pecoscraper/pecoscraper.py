@@ -29,13 +29,7 @@ time.sleep(1)
 account_id = get_account_id(driver)
 data = get_data(account_id,driver)
 
-#driver.get(api_url(account_id))
-#data = driver.find_elements_by_xpath("//pre")[0].text
-#driver.quit()
-#usage = json.loads(data)
-#usage = usage['reads']
-# for i in data:
-#     print(i)
+
 with open('hourly_usage.txt', 'w') as f:
     for item in data:
         f.write("%s\n" % item)
