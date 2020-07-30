@@ -34,7 +34,8 @@ data = get_data(account_id,driver)
 #driver.quit()
 #usage = json.loads(data)
 #usage = usage['reads']
-for i in data:
-    print(i)
-
-print(usage)
+# for i in data:
+#     print(i)
+with open('hourly_usage.txt', 'w') as f:
+    for item in data:
+        f.write("%s\n" % item)
