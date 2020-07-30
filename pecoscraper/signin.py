@@ -44,5 +44,8 @@ def login(driver):
         '//*[@id="SignInController"]/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/button')
     signin.click()
     info("Signing in.")
+    time.sleep(3)
+    url = driver.current_url
+    assert url == 'https://secure.peco.com/accounts/dashboard', f'Can\'t confirm login. URL not dashboard. {url}'
 
     return driver
