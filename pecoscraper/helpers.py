@@ -40,8 +40,7 @@ def api_url(account_id, start=to_timestamp(START_DATE),
     query = urlencode(
         dict(startDate=start, endDate=end, aggregateType=agg_type))
     url = urlunsplit((scheme, netloc, path, query, ""))
-    info("Making request to " + url + ". Retrieving hourly usage from " + start + " to " end)
-    return
+    return url
 
 
 def get_uuid(txt):
@@ -55,6 +54,3 @@ def days_to_seconds(days):
 def timestamp_to_iso(timestamp):
     dt = datetime.datetime
     return dt.fromtimestamp(timestamp).isoformat()
-
-
-
