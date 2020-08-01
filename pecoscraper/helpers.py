@@ -2,7 +2,11 @@ import datetime
 from urllib.parse import urlunsplit, urlencode
 import re
 import os
+import json
 from utils.logger import info, error, debug
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 
 START_DATE = os.environ.get('START_DATE')
 
@@ -10,6 +14,13 @@ START_DATE = os.environ.get('START_DATE')
 def get_today():
     today = datetime.datetime.now().isoformat()
     return today
+
+def wait_until_exists(driver,element):
+    try:
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, element)))
+    finally:
+        info('Found Element')
+        return driver.find_element_by_xpath(element)
 
 
 def find_inputs(driver, name):
@@ -50,6 +61,8 @@ def get_uuid(txt):
 def days_to_seconds(days):
     return (24*60*60*days)
 
+def hours_to_seconds(hours):
+    return (hours*60*60)
 
 def timestamp_to_iso(timestamp):
     dt = datetime.datetime

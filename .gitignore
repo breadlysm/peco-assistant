@@ -5,3 +5,4 @@ screenshots
 *.code-workspace
 buildnotes.md
 *.pyc
+*.txt

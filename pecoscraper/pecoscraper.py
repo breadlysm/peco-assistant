@@ -1,41 +1,36 @@
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import chromedriver_binary  # Adds chromedriver binary to path
-#from dateutil.parser import parse
-#from influxdb import InfluxDBClient
 import json
 from utils.logger import info, error, debug
-from helpers import api_url, get_uuid
+from helpers import api_url, get_uuid,hours_to_seconds
 from usage import get_data
 from signin import login
 from account import get_account_id
+from export import init_db, influx_write, infux_format
 import time
+import os
 
+TEST_INTERVAL = int(os.environ.get('SCRAPE_INTERVAL'))
+TEST_FAIL_INTERVAL = int(os.environ.get('SCRAPE_FAIL_INTERVAL'))
 
 def browser():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('headless')
-    caps = DesiredCapabilities.CHROME
-    caps['logPrefs'] = {'performance': 'ALL', 'enable_network': 'true'}
-    return webdriver.Chrome(options=chrome_options, desired_capabilities=caps)
+    return webdriver.Chrome(options=chrome_options)
 
+init_db()  # Setup the database if it does not already exist.
 
-driver = browser()
-info('Chrome driver initialized. Attempting Login')
-driver = login(driver)
-time.sleep(1)
-# for some reason session doesn't initiate until this page.
-
-account_id = get_account_id(driver)
-data = get_data(account_id,driver)
-
-#driver.get(api_url(account_id))
-#data = driver.find_elements_by_xpath("//pre")[0].text
-#driver.quit()
-#usage = json.loads(data)
-#usage = usage['reads']
-# for i in data:
-#     print(i)
-with open('hourly_usage.txt', 'w') as f:
-    for item in data:
-        f.write("%s\n" % item)
+while(1): # Run until manually stopped
+    driver = browser()
+    info('Chrome driver initialized. Attempting Login')
+    driver = login(driver)
+    # for some reason session doesn't initiate until this page.
+    account_id = get_account_id(driver)
+    data = get_data(account_id,driver)
+    influx_data = infux_format(data)
+    influx_write(influx_data)
+    
+    with open('hourly_usage.txt', 'w') as f:
+        for item in influx_data:
+            f.write("%s\n" % item)
+    time.sleep(hours_to_seconds(TEST_INTERVAL))
