@@ -1,5 +1,5 @@
 import os
-from helpers import find_inputs
+from helpers import find_inputs, wait_until_exists
 from utils.logger import info, error, debug
 import time
 
@@ -11,41 +11,37 @@ PECO_PASSWORD = os.environ.get('PECO_PASSWORD')
 def login(driver):
     # Access main login page.
     driver.get('https://secure.peco.com/Pages/Login.aspx')
-    if driver.title == 'Login | PECO - An Exelon Company':
-        info('Opened Peco Login page')
-    else:
-        error('Unknown problem opening login page. Screenshot saved. Exiting')
-        exit
+    
     # Username Input
-    try:
-        username = find_inputs(driver, 'Username')
-    except NoSuchElementException:
-        error("Username Element doesn't exist. Exiting")
-        exit
+    
+    username_xpath = "/html/body/form/div[3]/div[4]/main/div/div/section/div/div[1]/div/div[1]/div/div/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/div[1]/div/div/input"
+    username = wait_until_exists(driver,username_xpath)
     username.clear()
     username.send_keys(PECO_USERNAME)
     info('input username successfully')
-    time.sleep(1)
+
     # Password
-    try:
-        password = find_inputs(driver, 'Password')
-    except NoSuchElementException:
-        error("Password Element doesn't exist. Exiting")
-        exit
+    password_xpath="/html/body/form/div[3]/div[4]/main/div/div/section/div/div[1]/div/div[1]/div/div/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/div[2]/div/div/input"
+    password = wait_until_exists(driver,password_xpath)
     password.clear()
     password.send_keys(PECO_PASSWORD)
-    time.sleep(1)
     info('Input password successfully')
 
     # Click Signin
     # Add ability to check that the user is successsfully signed in. 
     info('Trying to submit sign in.')
-    signin = driver.find_element_by_xpath(
-        '//*[@id="SignInController"]/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/button')
+    button_xpath = "/html/body/form/div[3]/div[4]/main/div/div/section/div/div[1]/div/div[1]/div/div/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/button"
+    signin = wait_until_exists(driver,button_xpath)
     signin.click()
     info("Signing in.")
-    time.sleep(3)
-    url = driver.current_url
-    assert url == 'https://secure.peco.com/accounts/dashboard', f'Can\'t confirm login. URL not dashboard. {url}'
+    time.sleep(.5)
+    dashboard_xpath = "/html/body/app-root/app-accounts/main/article/section/div/div[2]/app-card-common[1]/section/header/div/span/span[2]"
+    dashboard = wait_until_exists(driver,dashboard_xpath)
+    if dashboard.get_attribute("innerText") == 'MY INSIGHTS':
+        info('Signed in successfully')
+    else:
+        debug('Inights element not located on Dashboard. Verify peco dashboard still shows an span element with inner text MY INSIGHTS. Element should be at xpath')
+        info('Problem signing in')
+
 
     return driver

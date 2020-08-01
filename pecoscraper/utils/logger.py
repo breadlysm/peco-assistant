@@ -1,13 +1,14 @@
 import logging
 import sys
 
+log_format = "%(asctime)s [%(levelname)s] %(message)s"
 
 def info(msg):
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
+        format=log_format,
         handlers=[
-            logging.FileHandler("log.log"),
+            #logging.FileHandler("log.log"),
             logging.StreamHandler(sys.stdout)
         ]
     )
@@ -17,21 +18,22 @@ def info(msg):
 def debug(msg):
     logging.basicConfig(
         level=logging.DEBUG,
-        format="%(asctime)s [%(levelname)s] %(message)s",
+        format=log_format,
         handlers=[
-            logging.FileHandler("log.log"),
+            #logging.FileHandler("debug.log"),
             logging.StreamHandler(sys.stdout)
         ]
     )
+    print(msg)
     logging.debug(msg)
 
 
 def error(msg):
     logging.basicConfig(
         level=logging.ERROR,
-        format="%(asctime)s [%(levelname)s] %(message)s",
+        format=log_format,
         handlers=[
-            logging.FileHandler("log.log"),
+            #logging.FileHandler("log.log"),
             logging.StreamHandler(sys.stdout)
         ]
     )

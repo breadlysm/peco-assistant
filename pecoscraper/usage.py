@@ -24,11 +24,7 @@ def usage_urls(account_id, days_per_range, end=get_today(), start=START_DATE):
             api_url(account_id, start=range['start'], end=range['end']))
     return usage_urls
 
-# driver.get(api_url(account_id))
-# data = driver.find_elements_by_xpath("//pre")[0].text
-# driver.quit()
-# usage = json.loads(data)
-# usage = usage['reads']
+
 def process_urls(urls,driver):
     usage = []
     length = len(urls)
@@ -45,17 +41,7 @@ def process_urls(urls,driver):
         time.sleep(.5)
     return(usage)
 
+
 def get_data(account_id,driver):
     data = process_urls(usage_urls(account_id,10),driver)
     return data
-
-    # energy_use = []
-    # for hour in usage:
-    #     energy_use.append({
-    #         "measurement": "energy_usage",
-    #         "time": parse(hour['startTime']).isoformat(),
-    #         "fields": {
-    #             "Kwh": float(hour['value']),
-    #             "cost": float(hour['providedCost'])
-    #         }
-    #     })
