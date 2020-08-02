@@ -13,6 +13,7 @@ This is setup to continually run. After you run the script the first time, I sug
 - Put it in Docker. 
 - Call influxdb to see what the last point of data was and pull everything from that point to the current time. Current the script pulls everything from the start date until now.
   - I suggest after an intial run to set the start date more recent so it's not pulling years of data each run. 
+- Improve logging. It exists, but it's hella noisy. 
 - Peco has a set of temperatures on their dash, I'd like to extract that as well and include it as a measurement within Influx. 
 
 
