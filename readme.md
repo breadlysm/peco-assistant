@@ -16,6 +16,7 @@ This is setup to continually run. After you run the script the first time, it wi
 ## Notes
 - Peco's site usually runs around a 1-2 days behind realtime. 
 - Not all Peco users may be able to use this based on differences in the meters. 
+- Data seems to update about 1x per day. It is not advised to go below 24 hours for the time_interval. 
 - This is an app that scrapes web pages based on specific page elements. It is very likely that these will change and potentially break the app. 
   - These should be relatively easy to fix unless it is a site overhaul. I do plan to maintain the functionality. 
 
@@ -47,13 +48,13 @@ INFLUX_USER = {influx user}
 INFLUX_PASS = {influx passwprd}
 INFLUX_DBNAME = peco 
 
-#intervals in hours. How often should it collect data. 
+#intervals in hours. How often should it collect data. Peco updates 1x per day, lower than 24 hours is not advised. 
 SCRAPE_INTERVAL = 24 
 SCRAPE_FAIL_INTERVAL = 1
 
 ```
 
 ## Disclaimer
-Use at your own discretion. This app is not in any way associated or authroized by Peco or Exelon. It was created to automatically access the usage data in your account which does appear to be allowed in their terms of service. Even with that, I am not responsible for any problematic outcomes you maye experience by using this. Excelon terms of service https://www.exeloncorp.com/terms-and-conditions
+Use at your own discretion. This app is not in any way associated or authroized by Peco or Exelon. It was created to automatically access the usage data in your account. Their terms do limit access by robots,spiders etc. from automatic collection of information however this is data I could easily grab by myself everyday and it is not doing anything abusive. It accesses 3 pages and then hits a JSON API once per day. Nevertheless, this is against their terms and I am not responsible for any problematic outcomes you may experience by using this. See their terms here https://www.exeloncorp.com/terms-and-conditions
 
 
