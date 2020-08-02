@@ -45,6 +45,7 @@ def to_timestamp(start):
 def api_url(account_id, start=to_timestamp(START_DATE),
             end=get_today(),
             agg_type='hour'):
+
     scheme = 'https'
     netloc = 'peco.opower.com'
     path = f"/ei/edge/apis/DataBrowser-v1/cws/cost/utilityAccount/{account_id}"
@@ -67,3 +68,6 @@ def hours_to_seconds(hours):
 def timestamp_to_iso(timestamp):
     dt = datetime.datetime
     return dt.fromtimestamp(timestamp).isoformat()
+
+def iso_to_timestamp(timestamp):
+    return datetime.datetime.fromisoformat(timestamp)
