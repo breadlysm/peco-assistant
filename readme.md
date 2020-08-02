@@ -10,8 +10,8 @@ Most of this script is getting the correct sessions and finding the correct plac
 This is setup to continually run. After you run the script the first time, it will continually monitor the first and last dates within your Influx db. It will base all future data requests on that last point that was submitted. 
 
 ## Notes
-Peco's site usually runs around a 1-2 days behind realtime. 
-Not all Peco users may be able to use this based on differences in meters. 
+- Peco's site usually runs around a 1-2 days behind realtime. 
+- Not all Peco users may be able to use this based on differences in meters. 
 
 ## Future improvements.
 - Put it in Docker. 
