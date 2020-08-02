@@ -7,17 +7,19 @@ I am not sure how far back data is stored around usage but, I was able to retrie
 
 Most of this script is getting the correct sessions and finding the correct places to get the data. Once it collects that, the rest is simply pulling data from an API. 
 
-This is setup to continually run. After you run the script the first time, I suggest setting the start date more recent so you don't pull everything, each iteration. 
+This is setup to continually run. After you run the script the first time, it will continually monitor the first and last dates within your Influx db. It will base all future data requests on that last point that was submitted. 
+
+## Notes
+Peco's site usually runs around a 1-2 days behind realtime. 
+Not all Peco users may be able to use this based on differences in meters. 
 
 ## Future improvements.
 - Put it in Docker. 
-- Call influxdb to see what the last point of data was and pull everything from that point to the current time. Current the script pulls everything from the start date until now.
-  - I suggest after an intial run to set the start date more recent so it's not pulling years of data each run. 
 - Improve logging. It exists, but it's hella noisy. 
 - Peco has a set of temperatures on their dash, I'd like to extract that as well and include it as a measurement within Influx. 
 
 
-### Dev
+## Configuring and Running Peco-scraper
 Used ENVs for variables as it's what I use in my docker server.
 
 I have a file named ".env" in the root of the directory that looks like for testing. It should work all the same as automated runs. 
