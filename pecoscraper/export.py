@@ -1,10 +1,10 @@
 import os
 from utils.logger import info, error, debug
 from influxdb import InfluxDBClient
-from helpers import get_today,to_timestamp,timestamp_to_iso,days_to_seconds,api_url,START_DATE
-import datetime
+from helpers import get_today,to_timestamp,timestamp_to_iso,days_to_seconds,api_url,START_DATE,iso_to_timestamp
 import json
 import time
+import datetime
 
 DB_ADDRESS = os.environ.get('INFLUX_HOST')
 DB_PORT = os.environ.get('INFLUX_PORT')
@@ -12,30 +12,53 @@ DB_USER = os.environ.get('INFLUX_USER')
 DB_PASSWORD = os.environ.get('INFLUX_PASSWORD')
 DB_DATABASE = os.environ.get('INFLUX_DBNAME')
 
-influxdb_client = InfluxDBClient(
-    DB_ADDRESS, DB_PORT, DB_USER, DB_PASSWORD, None)
+influxdb_client = InfluxDBClient(host=DB_ADDRESS, port=DB_PORT, username=DB_USER, password=DB_PASSWORD)
 
 def infux_format(data):
     points = []
     for point in data:
         use_data = {
                 'measurement': 'enery_use',
-                'time': point['endTime'],
+                'time': iso_to_timestamp(point['endTime']),
                 'fields': {
-                    'kwh': point['value']
+                    'kwh': float(point['value'])
                 }
             }
         cost_data = {
                 'measurement': 'energy_cost',
-                'time': point['endTime'],
+                'time': iso_to_timestamp(point['endTime']),
                 'fields': {
-                    'cost': point['providedCost']
+                    'cost': float(point['providedCost'])
                 }
             }
         points.append(use_data)
         points.append(cost_data)
     return points
 
+
+def get_last_write():
+    try:
+        last_write = influxdb_client.query('SELECT last("kwh")  FROM "autogen"."enery_use"')
+        last_write = last_write.raw['series'][0]['values'][0][0]
+        last_write = datetime.datetime.strptime(last_write,"%Y-%m-%dT%H:%M:%SZ")
+        debug(f'last_write is {last_write}')
+    except:
+        debug('Problem returning query or other issue. Returning start date as last write')
+        last_write = iso_to_timestamp(to_timestamp(START_DATE))
+    return last_write
+
+
+def get_first_write():
+    try:
+        first_write = influxdb_client.query('SELECT first("kwh")  FROM "autogen"."enery_use"')
+        first_write = first_write.raw['series'][0]['values'][0][0]
+        first_write = datetime.datetime.strptime(first_write,"%Y-%m-%dT%H:%M:%SZ")
+        first_write += datetime.timedelta(days=-1)
+        debug(f'first write is {first_write}')
+    except:
+        debug('Problem returning query or other issue. Returning start date as first write')
+        first_write = iso_to_timestamp(to_timestamp(START_DATE))
+    return first_write
 
 
 def init_db():
@@ -51,15 +74,12 @@ def init_db():
 
 
 def influx_write(points):
-    if influxdb_client.write_points(points) == True:
+    if influxdb_client.write_points(points,batch_size=200,protocol='json',database=DB_DATABASE) == True:
         print("Data written to DB successfully")
     else:  # Speedtest failed.
         error("Write failed")
 
-def usage_urls(account_id, days_per_range, end=get_today(), start=START_DATE):
-    dt = datetime.datetime
-    end = dt.fromisoformat(end)
-    start = dt.fromisoformat(start)
+def usage_urls(account_id, days_per_range,start,end=iso_to_timestamp(get_today())):
     ranges = []
     usage_urls = []
     if (end.timestamp() - start.timestamp()) > days_to_seconds(days_per_range):
@@ -71,6 +91,8 @@ def usage_urls(account_id, days_per_range, end=get_today(), start=START_DATE):
             })
             range_end = (range_end - days_to_seconds(days_per_range))
             range_start = (range_start-days_to_seconds(days_per_range))
+        diff = range_end - start.timestamp()
+        ranges.append({'end':timestamp_to_iso(range_end),'start':timestamp_to_iso(range_end-diff)})
     for range in ranges:
         usage_urls.append(
             api_url(account_id, start=range['start'], end=range['end']))
@@ -95,5 +117,9 @@ def process_urls(urls,driver):
 
 
 def get_data(account_id,driver):
-    data = process_urls(usage_urls(account_id,10),driver)
+    start = iso_to_timestamp(to_timestamp(START_DATE))
+    if get_last_write() > start and start > get_first_write():
+        start = get_last_write()
+    data = process_urls(usage_urls(account_id,10,start),driver)
     return data
+last = get_last_write()
