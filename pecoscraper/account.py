@@ -1,7 +1,49 @@
-from helpers import get_uuid,wait_until_exists
+from helpers import wait_until_exists
 from utils.logger import info, error, debug
 import json
 import time
+import os
+
+PECO_USERNAME = os.environ.get('PECO_USERNAME')
+PECO_PASSWORD = os.environ.get('PECO_PASSWORD')
+
+def login(driver):
+    # Access main login page.
+    driver.get('https://secure.peco.com/Pages/Login.aspx')
+    
+    # Username Input
+    
+    username_xpath = "/html/body/form/div[3]/div[4]/main/div/div/section/div/div[1]/div/div[1]/div/div/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/div[1]/div/div/input"
+    username = wait_until_exists(driver,username_xpath)
+    username.clear()
+    username.send_keys(PECO_USERNAME)
+    info('input username successfully')
+
+    # Password
+    password_xpath="/html/body/form/div[3]/div[4]/main/div/div/section/div/div[1]/div/div[1]/div/div/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/div[2]/div/div/input"
+    password = wait_until_exists(driver,password_xpath)
+    password.clear()
+    password.send_keys(PECO_PASSWORD)
+    info('Input password successfully')
+
+    # Click Signin
+    # Add ability to check that the user is successsfully signed in. 
+    info('Trying to submit sign in.')
+    button_xpath = "/html/body/form/div[3]/div[4]/main/div/div/section/div/div[1]/div/div[1]/div/div/ng-form/div/exelon-decorator-simple/div/div/div/div[1]/button"
+    signin = wait_until_exists(driver,button_xpath)
+    signin.click()
+    info("Signing in.")
+    time.sleep(.5)
+    dashboard_xpath = "/html/body/app-root/app-accounts/main/article/section/div/div[2]/app-card-common[1]/section/header/div/span/span[2]"
+    dashboard = wait_until_exists(driver,dashboard_xpath)
+    if dashboard.get_attribute("innerText") == 'MY INSIGHTS':
+        info('Signed in successfully')
+    else:
+        debug('Inights element not located on Dashboard. Verify peco dashboard still shows an span element with inner text MY INSIGHTS. Element should be at xpath')
+        info('Problem signing in')
+
+
+    return driver
 
 
 def get_account_id(driver):
@@ -32,19 +74,4 @@ def get_account_id(driver):
     user_json = user_text.split(' = ',1)[1].split(';')[0]
     user_json = json.loads(user_json)
     account_id = user_json['userData']['authorizedCustomers'][0]['utilityAccounts'][0]['uuid']
-    # options = driver.find_elements_by_tag_name('option')
-    # account_id = ''
-    # for element in options:
-    #     if element.get_property('label') == 'Electricity':
-    #         account_id = element.get_property('value')
-    #         account_id = get_uuid(account_id)
-    #         if len(account_id) < 5 & sleep <5:
-    #             info('Invalid Account ID. Retry')
-    #             get_account_id(driver,sleep=5)
-    #         elif sleep == 5 and len(account_id) < 5:
-    #             info('Still couldn\'t retrieve the account id. Exiting')
-    #             exit
-    #         else:
-    #             info('Found account ID.')
-    #             break
     return account_id
