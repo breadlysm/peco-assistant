@@ -3,16 +3,12 @@ import chromedriver_binary  # Adds chromedriver binary to path
 import json
 from utils.logger import info, error, debug
 from helpers import api_url, get_uuid,hours_to_seconds
-from usage import get_data
-from signin import login
-from account import get_account_id
-from export import init_db, influx_write, infux_format
+from account import get_account_id, login
+from export import init_db, influx_write, infux_format, get_data
 import time
 import os
 
 TEST_INTERVAL = int(os.environ.get('SCRAPE_INTERVAL'))
-TEST_FAIL_INTERVAL = int(os.environ.get('SCRAPE_FAIL_INTERVAL'))
-
 def browser():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('headless')
