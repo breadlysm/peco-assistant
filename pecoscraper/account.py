@@ -34,9 +34,9 @@ def login(driver):
     signin.click()
     info("Signing in.")
     time.sleep(.5)
-    dashboard_xpath = "/html/body/app-root/app-accounts/main/article/section/div/div[2]/app-card-common[1]/section/header/div/span/span[2]"
+    dashboard_xpath = "/html/body/form/div[3]/div[4]/footer[1]/div/div/nav/ul/li[1]/a"
     dashboard = wait_until_exists(driver,dashboard_xpath)
-    if dashboard.get_attribute("innerText") == 'MY INSIGHTS':
+    if dashboard.get_attribute("innerText") == 'About Us':
         info('Signed in successfully')
     else:
         debug('Inights element not located on Dashboard. Verify peco dashboard still shows an span element with inner text MY INSIGHTS. Element should be at xpath')

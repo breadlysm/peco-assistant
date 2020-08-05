@@ -11,7 +11,9 @@ import os
 TEST_INTERVAL = int(os.environ.get('SCRAPE_INTERVAL'))
 def browser():
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('headless')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
     return webdriver.Chrome(options=chrome_options)
 
 init_db()  # Setup the database if it does not already exist.
