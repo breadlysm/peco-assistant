@@ -1,5 +1,4 @@
 from selenium import webdriver
-import chromedriver_binary  # Adds chromedriver binary to path
 import json
 from utils.logger import info, error, debug
 from helpers import api_url, get_uuid,hours_to_seconds

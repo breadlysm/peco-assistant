@@ -21,7 +21,7 @@ RUN pip install --upgrade pip
 RUN cd /opt && git clone https://github.com/breadlysm/peco-scraper.git
 
 RUN pip3 install -r /opt/peco-scraper/requirements.txt 
-
+ENV PATH="/usr/local/bin/chromedriver:${PATH}"
 # Autorun chrome headless
 #ENTRYPOINT ["chromium-browser", "--headless", "--use-gl=swiftshader", "--disable-software-rasterizer", "--disable-dev-shm-usage"]
 CMD [ "python", "/opt/peco-scraper/pecoscraper/pecoscraper.py" ]
