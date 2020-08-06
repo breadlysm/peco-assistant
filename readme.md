@@ -41,7 +41,7 @@ docker run -e "PECO_USERNAME=replace_me_with_peco_user_email" \
 -e "INFLUX_PASS=replace_me_with_influx_user_pass" \
 -e "INFLUX_DBNAME=peco" \
 -e "SCRAPE_INTERVAL=24" \
-breadlysm/breadlysm/peco-usage-collector
+breadlysm/peco-usage-collector
 ```
 ### Run as python script
 I have a file named ".env" in the root of the directory that looks like for testing. It should work all the same as automated runs. 
