@@ -1,4 +1,4 @@
-# Peco Scraper
+# Peco Usage Collector
 
 
 An app that will collects your energy usage data from Peco and exports it to Infux or to a file. 
@@ -26,10 +26,28 @@ This is setup to continually run. After you run the script the first time, it wi
 - Peco has a set of temperatures on their dash, I'd like to extract that as well and include it as a measurement within Influx. 
 
 
-## Configuring and Running Peco-scraper
+## Configuring and Running Peco-usage-collector
 Used ENVs for variables as it's what I use in my docker server.
+### Run as a docker container 
+This builds automatically on Dockerhub so running the container with the needed variables should would. I've only tested in my environment. 
 
+docker run -e "PECO_USERNAME=replace_me_with_peco_user_email" \
+-e "PECO_PASSWORD=replace_me_with_peco_pass" \
+-e "START_DATE=2020-01-01" \
+-e "EXPORT_METHOD=influxdb" \
+-e "INFLUX_HOST=192.168.1.1" \
+-e "INFLUX_PORT=8086" \
+-e "INFLUX_USER=replace_me_with_influx_user" \
+-e "INFLUX_PASS=replace_me_with_influx_user_pass" \
+-e "INFLUX_DBNAME=peco" \
+-e "SCRAPE_INTERVAL=24" \
+breadlysm/breadlysm/peco-usage-collector
+
+### Run as python script
 I have a file named ".env" in the root of the directory that looks like for testing. It should work all the same as automated runs. 
+
+Once you've created that file, run the script using 
+`python peco-usage-collector/peco-usage-collector/peco-usage-collector.py
 
 ```env
 # User Variables
