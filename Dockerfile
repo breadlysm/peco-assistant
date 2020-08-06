@@ -20,7 +20,7 @@ RUN pip install --upgrade pip
 # Download and setup Peco-scraper
 RUN cd /opt && git clone https://github.com/breadlysm/peco-usage-collector.git
 
-RUN pip3 install -r /opt/peco-scraper/requirements.txt 
+RUN pip3 install -r /opt/peco-usage-collector/requirements.txt 
 ENV PATH="/usr/local/bin/chromedriver:${PATH}"
 # Autorun chrome headless
 #ENTRYPOINT ["chromium-browser", "--headless", "--use-gl=swiftshader", "--disable-software-rasterizer", "--disable-dev-shm-usage"]
