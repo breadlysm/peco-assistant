@@ -30,7 +30,7 @@ This is setup to continually run. After you run the script the first time, it wi
 Used ENVs for variables as it's what I use in my docker server.
 ### Run as a docker container 
 This builds automatically on Dockerhub so running the container with the needed variables should would. I've only tested in my environment. 
-
+```shell
 docker run -e "PECO_USERNAME=replace_me_with_peco_user_email" \
 -e "PECO_PASSWORD=replace_me_with_peco_pass" \
 -e "START_DATE=2020-01-01" \
@@ -42,7 +42,7 @@ docker run -e "PECO_USERNAME=replace_me_with_peco_user_email" \
 -e "INFLUX_DBNAME=peco" \
 -e "SCRAPE_INTERVAL=24" \
 breadlysm/breadlysm/peco-usage-collector
-
+```
 ### Run as python script
 I have a file named ".env" in the root of the directory that looks like for testing. It should work all the same as automated runs. 
 
