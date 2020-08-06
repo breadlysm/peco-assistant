@@ -56,7 +56,7 @@ def get_account_id(driver):
     info("Opening My usage homepage. Need to in order to achieve valid session")
     #time.sleep(sleep)
     # I found the accountid within an iframe, on an option element. 
-    opower_iframe_xpath = "/html/body/form/div[3]/div[4]/main/div/div/section[2]/div[2]/div/div[1]/div/div/div[2]/iframe" 
+    opower_iframe_xpath = "//iframe[contains(@id,'opower-embedded-iframe')]" 
     # Make sure iframe is loaded
     opower_iframe = wait_until_exists(driver,opower_iframe_xpath)
     # get the src url of the iframe due iframe selenium oddness. 
