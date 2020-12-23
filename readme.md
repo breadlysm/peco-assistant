@@ -1,3 +1,6 @@
+# 12-23-2020 App currently not working. 
+This works off scraping Pecos site. Functions needs to be adjusted to identify elements regardless of other page change appearances. Unusable until that takes place. 
+
 # Peco Usage Collector
 
 
