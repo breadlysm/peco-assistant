@@ -1,0 +1,9 @@
+*.log
+screenshots
+*.json
+.env
+*.code-workspace
+buildnotes.md
+*.pyc
+hourly_usage.txt
+config.yaml
