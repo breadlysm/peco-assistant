@@ -1,0 +1,24 @@
+# User Variables
+
+appName: PecoUsage
+logLevel: info
+author: breadlysm
+
+login:
+  email: user@email.com
+  password: dontuseeasypasswords
+
+dates:
+  start_date:  2018-01-01
+
+database:
+  db_type: influxdb
+  host:  192.168.1.1
+  port:  8086
+  user:  yourusername
+  password:  secondeasiestpassword
+  name:  peco
+
+app_settings:
+  interval: 24
+  fail_interval: 1
