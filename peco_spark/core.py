@@ -1,25 +1,26 @@
-from .helpers import Browser
+from peco_spark.helpers import Browser
 #from utils.logger import info, error, debug
 import json
 import time
 import os
+from peco_spark.config import get_config
 
   # Adds chromedriver binary to path
 
 #from utils.dates import date_string
-
+config = get_config()
 class Account:
 
     def __init__(self):
         self.driver = None
         self.browser = Browser()
-        self.account_id = None
-        self.username = os.environ.get('PECO_USERNAME')
-        self.password = os.environ.get('PECO_PASSWORD')
-        self.get_driver()
+        self.driver = self.browser.driver
+        self.username = config['peco']['user']
+        self.password = config['peco']['pass']
         self.login()
         self.data = self.get_data()
         self._data = None
+
 
     def login(self):
         self.browser.get('https://secure.peco.com/accounts/login')
@@ -31,14 +32,13 @@ class Account:
         submit.click()
 
     def get_data(self):
-        # url = F"https://peco.opower.com/ei/app/myEnergyUse/weather/day/2021/2/20"
-        # self.driver.get(url)
-        # usage = self.driver.execute_script('return window.seriesDTO')['series'][0]['data']
-        # weather = self.driver.execute_script('return window.weatherDTO')['series'][0]['data']
-        # data = self.clean_data(usage,weather)
-        # self._data = data
-        # return self._data
-        return Browser()
+        url = F"https://peco.opower.com/ei/app/myEnergyUse/weather/day/2021/2/20"
+        self.driver.get(url)
+        usage = self.driver.execute_script('return window.seriesDTO')['series'][0]['data']
+        weather = self.driver.execute_script('return window.weatherDTO')['series'][0]['data']
+        data = self.clean_data(usage,weather)
+        self._data = data
+        return self._data
     
     def clean_data(self,usage,weather):
         data = []
