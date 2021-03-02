@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 def get_config():
-    pass
+    return env_config()
 
 def env_config():
     load_dotenv()
@@ -29,6 +29,7 @@ def env_config():
             "fail_interval": os.getenv("FAIL_INTERVAL")
         }
     }
+    return config
 
 class Config(confuse.Configuration):
     def config_dir(self):
