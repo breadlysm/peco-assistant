@@ -1,0 +1,8 @@
+confuse
+influxdb
+python-dotenv
+PyYAML
+requests
+selenium
+simplejson
+urllib3
