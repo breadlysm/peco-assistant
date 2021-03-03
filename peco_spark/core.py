@@ -18,7 +18,6 @@ class Account:
         self.username = config['peco']['user']
         self.password = config['peco']['pass']
         self.login()
-        self.data = self.get_data()
         self._data = None
 
 
@@ -31,8 +30,17 @@ class Account:
         submit = self.browser.get_element_at_xpath("//*/button[@class='btn btn-primary fixed-width']")
         submit.click()
 
-    def get_data(self):
-        url = F"https://peco.opower.com/ei/app/myEnergyUse/weather/day/2021/2/20"
+    def get_data(self,date):
+        """Retrieves power usage data and weather data from your Peco Account. 
+
+
+        Args:
+            date (str): date in the format "01/01/2001"
+
+        Returns:
+            dict: dictionary by hour of the day with temperate and usage integers
+        """
+        url = F"https://peco.opower.com/ei/app/myEnergyUse/weather/day/{date}"
         self.driver.get(url)
         usage = self.driver.execute_script('return window.seriesDTO')['series'][0]['data']
         weather = self.driver.execute_script('return window.weatherDTO')['series'][0]['data']
