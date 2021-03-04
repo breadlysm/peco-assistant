@@ -17,7 +17,7 @@ def env_config():
             "host": os.getenv("DB_HOST"),
             "port": os.getenv("DB_PORT"),
             "user": os.getenv("DB_USER"),
-            "password": os.getenv("DB_PASS"),
+            "pass": os.getenv("DB_PASS"),
             "name": os.getenv("DB_NAME")
         },
         "peco": {
