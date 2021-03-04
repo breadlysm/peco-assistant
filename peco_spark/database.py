@@ -43,8 +43,8 @@ class Database:
             last_write = datetime.datetime.strptime(last_write,"%Y-%m-%dT%H:%M:%SZ")
             log.debug(f'last_write is {last_write}')
         except:
-            log.debug('Problem returning query or other issue. Returning start date as last write')
-            last_write = two_years()
+            log.debug('Problem returning query or other issue.')
+            last_write = None
         self.last_write = last_write
         return self.last_write
     
