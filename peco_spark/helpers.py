@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import *
 from selenium import webdriver
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from pytz import timezone,utc
 import time
 import logging
@@ -73,6 +73,11 @@ def to_datetime(str,tz=utc,local_tz=None,fmt="%a, %d %b %Y %H:%M:%S"):
 def eastern():
     return timezone('US/Eastern')
 
+def to_utc(dt,current_tz=eastern()):
+    dt = current_tz.localize(dt, is_dst=None)
+    dt = dt.astimezone(utc)
+    return dt
+
 
 def get_today():
     today = datetime.now().isoformat()
@@ -88,15 +93,15 @@ def year(timestamp):
     return timestamp.strftime("%Y")
 
 def add_days(dt,days):
-    return dt + datetime.timedelta(days=days)
+    return dt + timedelta(days=days)
 
 def peco_date(dt):
-    return dt.astimezone(eastern()).strftime("%Y/%m/%d")
+    return dt.astimezone(eastern()).strftime("%Y/%-m/%d")
 
-def peco_date(start,end=datetime.now(utc)):
+def peco_dates(start,end=datetime.now(utc)):
     """"returns list of days to get metrics for in peco accepted format
     Args:
-        start (datetime): where list of dates should start
+        start (datetime): where list of dates should start, must be utc
         end (datetime, optional): UTC datetime on end of range. Defaults to datetime.now(utc).
     """
     day = start
@@ -104,13 +109,14 @@ def peco_date(start,end=datetime.now(utc)):
     while day < end:
         days.append(peco_date(day))
         day = add_days(day,1)
+    return days
         
 
 
 log_format = "%(asctime)s [%(levelname)s] %(message)s"
 
 def two_years():
-    return datetime.datetime.now(utc) - datetime.timedelta(days=2*365)
+    return datetime.datetime.now(utc) - timedelta(days=2*365)
 
 class Log:
     def info(msg):
