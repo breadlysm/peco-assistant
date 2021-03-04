@@ -12,13 +12,11 @@ config = get_config()
 class Account:
 
     def __init__(self):
-        self.driver = None
         self.browser = Browser()
         self.driver = self.browser.driver
         self.username = config['peco']['user']
         self.password = config['peco']['pass']
         self.login()
-        self._data = None
 
 
     def login(self):
@@ -32,11 +30,8 @@ class Account:
 
     def get_data(self,date):
         """Retrieves power usage data and weather data from your Peco Account. 
-
-
         Args:
-            date (str): date in the format "01/01/2001"
-
+            date (str): date in the format "2001/2/20"
         Returns:
             dict: dictionary by hour of the day with temperate and usage integers
         """
@@ -45,8 +40,7 @@ class Account:
         usage = self.driver.execute_script('return window.seriesDTO')['series'][0]['data']
         weather = self.driver.execute_script('return window.weatherDTO')['series'][0]['data']
         data = self.clean_data(usage,weather)
-        self._data = data
-        return self._data
+        return data
     
     def clean_data(self,usage,weather):
         data = []
