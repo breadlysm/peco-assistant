@@ -18,11 +18,23 @@ class Database:
         self.db_name = self.config()['database']['name']
         self.client = self.get_db_client()
         self._client = None
+        self.init_db()
         self.last_write = self.get_last_write()
         self._last_write = None
 
     def config(self):
         return get_config()
+    
+    def init_db(self):
+        databases = self.client.get_list_database()
+
+        if len(list(filter(lambda x: x['name'] == self.db_name, databases))) == 0:
+            self.client.create_database(
+                self.db_name)  # Create if does not exist.
+            log.info(f'Created database {self.db_name}')
+        else:
+            # Switch to if does exist.
+            self.client.switch_database(self.db_name)
 
     def get_db_client(self):
         if self.db_type == 'influxdb':
@@ -33,7 +45,12 @@ class Database:
         else:
             log.error("No client type or incompatibile DB Client type. Closing")
         return self._client
-
+        
+    def influx_write(self,points):
+        if self.client.write_points(points,batch_size=200,protocol='json',database=self.db_name) == True:
+            print("Data written to DB successfully")
+        else:  # Speedtest failed.
+            log.error("Write failed")
 
 
     def get_last_write_influx(self):
@@ -48,23 +65,18 @@ class Database:
         self.last_write = last_write
         return self.last_write
     
-    def infux_format(data):
+    def influx_format(data):
         points = []
         for point in data:
-            use_data = {
+            body = {
                     'measurement': 'enery_use',
-                    'time': iso_to_timestamp(point['endTime']),
+                    'time': point['endTime'],
                     'fields': {
-                        'kwh': float(point['value'])
+                        'kwh': float(point['kwh']),
+                        'cost': point['usage_cost'],
+                        'temperature': point['temperature'],
+                        'current_price': point['current_price']
                     }
                 }
-            cost_data = {
-                    'measurement': 'energy_cost',
-                    'time': iso_to_timestamp(point['endTime']),
-                    'fields': {
-                        'cost': float(point['providedCost'])
-                    }
-                }
-            points.append(use_data)
-            points.append(cost_data)
+            points.append(body)
         return points
