@@ -1,4 +1,4 @@
-from peco_spark.helpers import Browser, eastern,to_datetime
+from peco_spark.helpers import Browser, eastern, peco_dates,to_datetime,log
 #from utils.logger import info, error, debug
 import json
 import time
@@ -37,29 +37,53 @@ class Account:
         Returns:
             dict: dictionary by hour of the day with temperate and usage integers
         """
-        url = F"https://peco.opower.com/ei/app/myEnergyUse/weather/day/{date}"
-        self.driver.get(url)
-        usage = self.driver.execute_script('return window.seriesDTO')['series'][0]['data']
-        weather = self.driver.execute_script('return window.weatherDTO')['series'][0]['data']
-        data = self.clean_data(usage,weather)
+        try:
+            url = F"https://peco.opower.com/ei/app/myEnergyUse/weather/day/{date}"
+            self.driver.get(url)
+            usage = self.driver.execute_script('return window.seriesDTO')['series'][0]['data']
+            weather = self.driver.execute_script('return window.weatherDTO')['series'][0]['data']
+            data = self.clean_data(usage,weather)
+            if data is None:
+                raise Exception(F"No values found for {date}")
+        except:
+            data = None
         return data
     
+    def calc_cost(self,kwh):
+        cost = self.kwh_cost * kwh
+        return cost
+
     def clean_data(self,usage,weather):
         data = []
-        for hour in range(len(weather)):
-            row = {'startDate':to_datetime(weather[hour]['startDate'],local_tz=eastern()),
-                'endDate':to_datetime(weather[hour]['endDate'],local_tz=eastern()),
-                'temperature':weather[hour]['value'],
-                'kwh':usage[hour]['value']}
-            data.append(row)
-        return data
+        try:
+            for hour in range(len(weather)):
+                row = {'startDate':to_datetime(weather[hour]['startDate'],local_tz=eastern()),
+                    'endDate':to_datetime(weather[hour]['endDate'],local_tz=eastern()),
+                    'temperature':weather[hour]['value'],
+                    'kwh':usage[hour]['value'],
+                    'usage_cost': self.calc_cost(usage[hour]['value']),
+                    'current_price': self.kwh_cost}
+                data.append(row)
+            return data
+        except IndexError as err:
+            log.error(F"No values available for {weather['hour']['startDate']}")
+            return None
 
     def get_kwh_cost(self):
         xpath = '//*[@id="ctl00_PlaceHolderMain_ctl14__ControlWrapper_RichHtmlField"]/table/tbody/tr[3]/td[2]/div'
         self.driver.get("https://www.peco.com/MyAccount/MyService/Pages/ElectricPricetoCompare.aspx")
         cost = self.browser.get_element_at_xpath(xpath)
         cost = cost.text
+        cost = cost.strip("$")
+        cost = float(cost)
         self._kwh_cost = cost
         return self._kwh_cost
 
+# def main():
+#     account = Account()
+#     dates = peco_dates()
+
+
+# if __name__ == '__main__':
+#     main()
 
