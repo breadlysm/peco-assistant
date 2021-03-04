@@ -75,7 +75,7 @@ def eastern():
 
 
 def get_today():
-    today = datetime.datetime.now().isoformat()
+    today = datetime.now().isoformat()
     return today
 
 def day(timestamp):
@@ -87,13 +87,30 @@ def month(timestamp):
 def year(timestamp):
     return timestamp.strftime("%Y")
 
-def peco_date(timestamp):
-    return timestamp.strftime("%Y/%m/%d")
+def add_days(dt,days):
+    return dt + datetime.timedelta(days=days)
+
+def peco_date(dt):
+    return dt.astimezone(eastern()).strftime("%Y/%m/%d")
+
+def peco_date(start,end=datetime.now(utc)):
+    """"returns list of days to get metrics for in peco accepted format
+    Args:
+        start (datetime): where list of dates should start
+        end (datetime, optional): UTC datetime on end of range. Defaults to datetime.now(utc).
+    """
+    day = start
+    days = []
+    while day < end:
+        days.append(peco_date(day))
+        day = add_days(day,1)
+        
+
 
 log_format = "%(asctime)s [%(levelname)s] %(message)s"
 
 def two_years():
-    return datetime.datetime.now() - datetime.timedelta(days=2*365)
+    return datetime.datetime.now(utc) - datetime.timedelta(days=2*365)
 
 class Log:
     def info(msg):
