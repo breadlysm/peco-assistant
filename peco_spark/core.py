@@ -1,4 +1,4 @@
-from peco_spark.helpers import Browser
+from peco_spark.helpers import Browser, eastern,to_datetime
 #from utils.logger import info, error, debug
 import json
 import time
@@ -45,8 +45,8 @@ class Account:
     def clean_data(self,usage,weather):
         data = []
         for hour in range(len(weather)):
-            row = {'startDate':weather[hour]['startDate'],
-                'endDate':weather[hour]['endDate'],
+            row = {'startDate':to_datetime(weather[hour]['startDate'],local_tz=eastern()),
+                'endDate':to_datetime(weather[hour]['endDate'],local_tz=eastern()),
                 'temperature':weather[hour]['value'],
                 'kwh':usage[hour]['value']}
             data.append(row)
