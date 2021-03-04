@@ -51,7 +51,7 @@ class Browser:
                     element = None
         return element
 
-def to_datetime(str,tz=None,local_tz=None,fmt="%a, %d %b %Y %H:%M:%S"):
+def to_datetime(str,tz=utc,local_tz=None,fmt="%a, %d %b %Y %H:%M:%S"):
     """Returns datetime object from string
 
     Args:
@@ -67,7 +67,7 @@ def to_datetime(str,tz=None,local_tz=None,fmt="%a, %d %b %Y %H:%M:%S"):
         return dt
     else:
         dt = local_tz.localize(dt, is_dst=None)
-        dt = dt.astimezone(utc)
+        dt = dt.astimezone(tz)
         return dt
 
 def eastern():
