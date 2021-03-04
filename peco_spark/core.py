@@ -17,6 +17,8 @@ class Account:
         self.username = config['peco']['user']
         self.password = config['peco']['pass']
         self.login()
+        self.kwh_cost = self.get_kwh_cost()
+        self._kwh_cost = None
 
 
     def login(self):
@@ -51,3 +53,13 @@ class Account:
                 'kwh':usage[hour]['value']}
             data.append(row)
         return data
+
+    def get_kwh_cost(self):
+        xpath = '//*[@id="ctl00_PlaceHolderMain_ctl14__ControlWrapper_RichHtmlField"]/table/tbody/tr[3]/td[2]/div'
+        self.driver.get("https://www.peco.com/MyAccount/MyService/Pages/ElectricPricetoCompare.aspx")
+        cost = self.browser.get_element_at_xpath(xpath)
+        cost = cost.text
+        self._kwh_cost = cost
+        return self._kwh_cost
+
+
