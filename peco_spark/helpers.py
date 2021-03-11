@@ -119,7 +119,7 @@ def two_years():
     return datetime.datetime.now(utc) - timedelta(days=2*365)
 
 class Log:
-    def info(msg):
+    def info(self,msg):
         logging.basicConfig(
             level=logging.INFO,
             format=log_format,
@@ -130,7 +130,7 @@ class Log:
         )
         logging.info(msg)
 
-    def debug(msg):
+    def debug(self,msg):
         logging.basicConfig(
             level=logging.DEBUG,
             format=log_format,
@@ -142,7 +142,7 @@ class Log:
         print(msg)
         logging.debug(msg)
 
-    def error(msg):
+    def error(self,msg):
         logging.basicConfig(
             level=logging.ERROR,
             format=log_format,
