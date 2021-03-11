@@ -1,4 +1,3 @@
-import 
 from influxdb import InfluxDBClient
 from .helpers import log,get_today,two_years
 from .config import get_config
@@ -19,7 +18,7 @@ class Database:
         self.client = self.get_db_client()
         self._client = None
         self.init_db()
-        self.last_write = self.get_last_write()
+        self.last_write = self.get_last_write_influx()
         self._last_write = None
 
     def config(self):
@@ -39,7 +38,7 @@ class Database:
     def get_db_client(self):
         if self.db_type == 'influxdb':
             self._client = InfluxDBClient(host=self.db_host,
-                                    port=self.db_host,
+                                    port=self.db_port,
                                     username=self.db_user,
                                     password=self.db_pass)
         else:
@@ -58,9 +57,10 @@ class Database:
             last_write = self.client.query('SELECT last("kwh")  FROM "autogen"."enery_use"')
             last_write = last_write.raw['series'][0]['values'][0][0]
             last_write = datetime.datetime.strptime(last_write,"%Y-%m-%dT%H:%M:%SZ")
-            log.debug(f'last_write is {last_write}')
-        except:
-            log.debug('Problem returning query or other issue.')
+            log.debug(f"last_write is {last_write}")
+        except Exception as err:
+            print(err)
+            log.debug("Problem returning query or other issue.")
             last_write = None
         self.last_write = last_write
         return self.last_write
