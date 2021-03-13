@@ -95,6 +95,9 @@ def year(timestamp):
 def add_days(dt,days):
     return dt + timedelta(days=days)
 
+def sub_days(dt,days):
+    return dt - timedelta(days=days)
+
 def peco_date(dt):
     return dt.astimezone(eastern()).strftime("%Y/%-m/%d")
 
@@ -116,7 +119,7 @@ def peco_dates(start,end=datetime.now(utc)):
 log_format = "%(asctime)s [%(levelname)s] %(message)s"
 
 def two_years():
-    return datetime.datetime.now(utc) - timedelta(days=2*365)
+    return datetime.now(utc) - timedelta(days=2*365)
 
 class Log:
     def info(self,msg):
