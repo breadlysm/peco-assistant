@@ -3,16 +3,16 @@ from peco_spark.helpers import peco_dates, to_utc
 from peco_spark.core import Account
 from peco_spark.database import Database
 
-#account = Account()
+account = Account()
 #data = account.get_data('2021/2/01')
 
-
-# days = peco_dates(to_utc(datetime.now() - timedelta(days=10)))
-# data = []
-# for i in days:
-#     d = account.get_data(i)
-#     if d is not None:
-#         data.append(d)
+x = to_utc(datetime.now() - timedelta(days=10))
+days = peco_dates(start=(x-timedelta(days=220)),end=x)
+data = []
+for i in days:
+    d = account.get_data(i)
+    if d is not None:
+        data = data + d
 # write_data = []
 # for day in data:
 #     for hour in day:
@@ -20,3 +20,5 @@ from peco_spark.database import Database
 
 db = Database()
 print(db.last_write)
+data = db.influx_format(data)
+db.influx_write(data)
