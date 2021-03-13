@@ -1,4 +1,5 @@
-from peco_spark.helpers import Browser, eastern, peco_dates,to_datetime,log
+from peco_spark.helpers import Browser, eastern, peco_dates,to_datetime,log, two_years
+from peco_spark.database import Database
 #from utils.logger import info, error, debug
 import json
 import time
@@ -17,8 +18,9 @@ class Account:
         self.username = config['peco']['user']
         self.password = config['peco']['pass']
         self.login()
-        self.kwh_cost = self.get_kwh_cost()
         self._kwh_cost = None
+        self.kwh_cost = self.get_kwh_cost()
+        
 
 
     def login(self):
@@ -79,11 +81,28 @@ class Account:
         self._kwh_cost = cost
         return self._kwh_cost
 
-# def main():
-#     account = Account()
-#     dates = peco_dates()
+def main():
+    run = True
+    account = Account()
+    db = Database()
+    last_write = two_years()
+    while run:
+        start_date = db.last_write or two_years()
+        if last_write < start_date:
+            log.debug("The last data written is over 1 day old, starting update")
+            dates = peco_dates(start_date)
+            data = []
+            for day in dates:
+                usage = account.get_data(day)
+                usage = db.influx_format(usage)
+                data = data + usage
+            last_write = start_date
+            log.info("Usage succesfully collected. Sleeping for 6 hours")
+        else: 
+            log.info("No update needed. Sleeping for 6 hours")
+            
+        time.sleep(21600)
 
-
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()
 
