@@ -68,7 +68,7 @@ class Account:
                 data.append(row)
             return data
         except IndexError as err:
-            log.error(F"No values available for {weather['hour']['startDate']}")
+            log.info(F"No values available for {weather['hour']['startDate']}")
             return None
 
     def get_kwh_cost(self):
@@ -89,11 +89,13 @@ def main():
     while run:
         start_date = db.last_write or two_years()
         if last_write < start_date:
-            log.debug("The last data written is over 1 day old, starting update")
+            log.info("The last data written is over 1 day old, starting update")
             dates = peco_dates(start_date)
             data = []
             for day in dates:
                 usage = account.get_data(day)
+                if usage is None:
+                    continue
                 usage = db.influx_format(usage)
                 data = data + usage
             last_write = start_date
