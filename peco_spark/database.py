@@ -1,9 +1,10 @@
 from influxdb import InfluxDBClient
-from .helpers import log,get_today,two_years
+from pytz import utc
+from .helpers import log,get_today, sub_days, to_utc,two_years
 from .config import get_config
 import json
 import time
-import datetime
+from datetime import datetime
 
 config = get_config()
 
@@ -15,11 +16,12 @@ class Database:
         self.db_host = self.config()['database']['host']
         self.db_port = self.config()['database']['port']
         self.db_name = self.config()['database']['name']
-        self.client = self.get_db_client()
         self._client = None
+        self.client = self.get_db_client()
         self.init_db()
-        self.last_write = self.get_last_write_influx()
         self._last_write = None
+        self.last_write = self.last_write()
+        
 
     def config(self):
         return get_config()
@@ -46,31 +48,62 @@ class Database:
         return self._client
         
     def influx_write(self,points):
+        """Writes list of influx_format points to specific named DB. 
+
+        Args:
+            points (influx_format): List of points formatted to match influx json protocol
+        """
         if self.client.write_points(points,batch_size=200,protocol='json',database=self.db_name) == True:
             print("Data written to DB successfully")
         else:  # Speedtest failed.
             log.error("Write failed")
 
+    def last_write(self):
+        get_last_write = False
+        if self._last_write is None:
+            get_last_write = True
+        elif self._last_write < sub_days(datetime.now(utc),1):
+            get_last_write = True
+        if get_last_write:
+            self.get_last_write_influx()
+            return self._last_write
+        else:
+            return self._last_write
+
 
     def get_last_write_influx(self):
+        """retrieves the last data point recorded on the objects client's db
+
+        Returns:
+            datetime: last write point in python datetime
+        """
         try:
             last_write = self.client.query('SELECT last("kwh")  FROM "autogen"."enery_use"')
             last_write = last_write.raw['series'][0]['values'][0][0]
-            last_write = datetime.datetime.strptime(last_write,"%Y-%m-%dT%H:%M:%SZ")
+            last_write = datetime.strptime(last_write,"%Y-%m-%dT%H:%M:%SZ")
             log.debug(f"last_write is {last_write}")
         except Exception as err:
             print(err)
             log.debug("Problem returning query or other issue.")
             last_write = None
-        self.last_write = last_write
-        return self.last_write
+        self._last_write = to_utc(last_write)
+        return self._last_write
     
-    def influx_format(data):
+    def influx_format(self,data):
+        """Formats the data points retrieved to the appropriate influx format. 
+
+
+        Args:
+            data (list): list of dictionaries that contain the hours of the day usage metrics. 
+
+        Returns:
+            list: same data formatted for influx. 
+        """
         points = []
         for point in data:
             body = {
                     'measurement': 'enery_use',
-                    'time': point['endTime'],
+                    'time': point['endDate'],
                     'fields': {
                         'kwh': float(point['kwh']),
                         'cost': point['usage_cost'],
