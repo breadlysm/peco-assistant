@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.8-slim-buster
 
 # install google chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -24,4 +24,12 @@ RUN pip3 install -r /opt/peco-usage-collector/requirements.txt
 ENV PATH="/usr/local/bin/chromedriver:${PATH}"
 # Autorun chrome headless
 #ENTRYPOINT ["chromium-browser", "--headless", "--use-gl=swiftshader", "--disable-software-rasterizer", "--disable-dev-shm-usage"]
-CMD [ "python", "/opt/peco-usage-collector/peco-usage-collector/peco-usage-collector.py" ]
+#CMD [ "python", "/opt/peco-usage-collector/peco-usage-collector/peco-usage-collector.py" ]
+
+# Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
+# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
+CMD ["python", "peco_spark/core.py"]
