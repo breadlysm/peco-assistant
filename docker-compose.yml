@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  pecospark:
+    image: pecospark
+    build:
+      context: .
+      dockerfile: ./Dockerfile
