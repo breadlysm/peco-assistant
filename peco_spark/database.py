@@ -1,31 +1,22 @@
 from influxdb import InfluxDBClient
 from pytz import utc
 from .helpers import log,get_today, sub_days, to_utc,two_years
-from .config import get_config
 import json
 import time
 from datetime import datetime
 
-config = get_config()
-
 class Database:
-    def __init__(self):
-        self.db_user = self.config()['database']['user']
-        self.db_pass = self.config()['database']['pass']
-        self.db_type = self.config()['database']['type']
-        self.db_host = self.config()['database']['host']
-        self.db_port = self.config()['database']['port']
-        self.db_name = self.config()['database']['name']
+    def __init__(self,config):
+        self.db_user = config['database']['user']
+        self.db_pass = config['database']['pass']
+        self.db_type = config['database']['type']
+        self.db_host = config['database']['host']
+        self.db_port = config['database']['port']
+        self.db_name = config['database']['name']
         self._client = None
-        self.client = self.get_db_client()
         self.init_db()
         self._last_write = None
-        self.last_write = self.last_write()
-        
-
-    def config(self):
-        return get_config()
-    
+            
     def init_db(self):
         databases = self.client.get_list_database()
 
@@ -37,15 +28,19 @@ class Database:
             # Switch to if does exist.
             self.client.switch_database(self.db_name)
 
-    def get_db_client(self):
-        if self.db_type == 'influxdb':
-            self._client = InfluxDBClient(host=self.db_host,
-                                    port=self.db_port,
-                                    username=self.db_user,
-                                    password=self.db_pass)
+    @property
+    def client(self):
+        if self._client is not None:
+            return self._client
         else:
-            log.error("No client type or incompatibile DB Client type. Closing")
-        return self._client
+            if self.db_type == 'influxdb':
+                self._client = InfluxDBClient(host=self.db_host,
+                                        port=self.db_port,
+                                        username=self.db_user,
+                                        password=self.db_pass)
+            else:
+                log.error("No client type or incompatibile DB Client type. Closing")
+            return self._client
         
     def influx_write(self,points):
         """Writes list of influx_format points to specific named DB. 
@@ -58,6 +53,7 @@ class Database:
         else:  # Speedtest failed.
             log.error("Write failed")
 
+    @property
     def last_write(self):
         get_last_write = False
         if self._last_write is None:
