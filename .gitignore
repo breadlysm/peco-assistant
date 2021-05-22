@@ -7,3 +7,4 @@ buildnotes.md
 *.pyc
 hourly_usage.txt
 config.yaml
+docker-compose.debug.yml
