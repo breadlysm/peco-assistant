@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.8
 
 # install google chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -11,25 +11,21 @@ RUN apt-get install -yqq unzip git
 RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 
+# add chromedriver to path
+ENV PATH="/usr/local/bin/chromedriver:${PATH}"
+
 # set display port to avoid crash
 ENV DISPLAY=:99
 
 # upgrade pip
 RUN pip install --upgrade pip
 
-# Download and setup Peco-scraper
-RUN cd /opt && git clone https://github.com/breadlysm/peco-usage-collector.git
+# copy and setup peco_spark
+WORKDIR /app
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt 
+COPY . .
+RUN pip install -e ./
 
-RUN pip3 install -r /opt/peco-usage-collector/requirements.txt 
-ENV PATH="/usr/local/bin/chromedriver:${PATH}"
-# Autorun chrome headless
-#ENTRYPOINT ["chromium-browser", "--headless", "--use-gl=swiftshader", "--disable-software-rasterizer", "--disable-dev-shm-usage"]
-#CMD [ "python", "/opt/peco-usage-collector/peco-usage-collector/peco-usage-collector.py" ]
-
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
-
-# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["python", "peco_spark/core.py"]
+# start
+CMD [ "python", "peco_spark/core.py" ]
