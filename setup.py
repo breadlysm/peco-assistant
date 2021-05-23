@@ -1,11 +1,4 @@
-#from distutils.core import setup
 from peco_spark.version import __version__
-# setup(name='peco_spark',
-#       version=
-#       py_modules=['foo'],
-#       )
-
-
 import setuptools
 
 with open("README.md", "r") as fh:
@@ -34,6 +27,8 @@ setuptools.setup(
         "requests",
         "selenium",
         "simplejson",
-        "urllib3"
+        "urllib3",
+        "pytz",
+        "toml"
     ],
 )
