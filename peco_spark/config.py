@@ -25,10 +25,10 @@ def env_config():
             "pass": os.getenv("PECO_PASS")
         },
         "settings":{
-            "interval": os.getenv("GRAB_INTERVAL"),
-            "fail_interval": os.getenv("FAIL_INTERVAL")
+            "sleep_interval": hours_to_seconds(int(os.getenv("SLEEP_INTERVAL", 6)))
         }
     }
+    
     return config
 
 class Config(confuse.Configuration):
@@ -38,3 +38,5 @@ class Config(confuse.Configuration):
 def yaml_config():
     return Config('peco_spark')
 
+def hours_to_seconds(hours):
+    return hours * 60 * 60
