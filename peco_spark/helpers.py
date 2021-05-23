@@ -9,7 +9,7 @@ from pytz import timezone,utc
 import time
 import logging
 import sys
-import chromedriver_binary
+#import chromedriver_binary
 import os
 
 tz = timezone('US/Eastern')
