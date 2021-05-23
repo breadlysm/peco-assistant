@@ -31,16 +31,16 @@ Used ENVs for variables as it's what I use in my docker server.
 ### Run as a docker container 
 This builds automatically on Dockerhub so running the container with the needed variables should would. I've only tested in my environment. 
 ```shell
-docker run -e "PECO_USERNAME=replace_me_with_peco_user_email" \
--e "PECO_PASSWORD=replace_me_with_peco_pass" \
+docker run -e "PECO_USER=replace_me_with_peco_user_email" \
+-e "PECO_PASS=replace_me_with_peco_pass" \
 -e "START_DATE=2020-01-01" \
--e "EXPORT_METHOD=influxdb" \
--e "INFLUX_HOST=192.168.1.1" \
--e "INFLUX_PORT=8086" \
--e "INFLUX_USER=replace_me_with_influx_user" \
--e "INFLUX_PASS=replace_me_with_influx_user_pass" \
--e "INFLUX_DBNAME=peco" \
--e "SCRAPE_INTERVAL=24" \
+-e "DB_TYPE=influxdb" \
+-e "DB_HOST=192.168.1.1" \
+-e "DB_PORT=8086" \
+-e "DB_USER=replace_me_with_db_user" \
+-e "DB_PASS=replace_me_with_db_user_pass" \
+-e "DB_DBNAME=peco" \
+-e "SLEEP_INTERVAL=24" \
 breadlysm/peco-usage-collector
 ```
 ### Run as python script
