@@ -1,8 +1,17 @@
 version: '3.4'
-
 services:
-  pecospark:
-    image: pecospark
+  peco_spark:
+    environment:
+      - PECO_USER=[peco_email]
+      - PECO_PASS=[peco_pass]
+      - DB_TYPE=influxdb # DB Type should be "influxdb". Only dbtype support atm. 
+      - DB_HOST=[ip_or_hostname_of_db]
+      - DB_PORT=[db_port]
+      - DB_USER=[db_username]
+      - DB_PASS=[db_password]
+      - DB_DBNAME=[name_of_db]
+      - SLEEP_INTERVAL=24 #In Hours. How often to check for updates. 
+    image: peco_spark
     build:
       context: .
       dockerfile: ./Dockerfile
