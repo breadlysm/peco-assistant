@@ -8,3 +8,5 @@ buildnotes.md
 hourly_usage.txt
 config.yaml
 docker-compose.debug.yml
+*.egg-info
+__pycache__peco_spark.egg-info/
