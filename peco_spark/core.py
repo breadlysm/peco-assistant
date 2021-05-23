@@ -31,8 +31,7 @@ def main():
             log.info("Usage succesfully collected. Sleeping for 6 hours")
         else: 
             log.info("No update needed. Sleeping for 6 hours")
-            
-        time.sleep(21600)
+        time.sleep(config['settings']['sleep_interval'])
 
 if __name__ == '__main__':
     main()
