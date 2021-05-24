@@ -6,13 +6,7 @@ An app that will collects your energy usage data from Peco and exports it to Inf
 
 Peco is an energy provider in Southeast Pennsylvania. Peco is part of Exelon Energy and ooking at their other energy company sites, they look like cut and past copies with different branding. This may very well work in other Northeast US Energy companies sites as is or with slight modifications. I can only confirm this works with Peco though. 
 
-I'm happy to coordinate modifications on this app to work with other providers. Any improvements in general would be welcomed too. 
-
-I am not sure how far back data is stored around usage but, I was able to retrieve everything since my account started. That was midway through 2017 so it has several years worth. If there is a limit, I am not able to test. 
-
-Most of this script is getting the correct sessions and finding the correct places to get the data. Once it collects that, the rest is simply pulling data from an API. 
-
-This is setup to continually run. After you run the script the first time, it will continually monitor the first and last dates within your Influx db. It will base all future data requests on that last point that was submitted or if the start_date is changed, it will base it off that until it fills in the older data points.
+The script will begin collecting data from aeither 2 years ago, or the most recent date with data from the configured database. 
 
 ## Notes
 - Peco's site usually runs around a 1-2 days behind realtime. 
@@ -45,24 +39,19 @@ Once you've created that file, run the script using
 
 ```env
 # User Variables
-PECO_USERNAME = {peco username}
-PECO_PASSWORD = {peco password}
+PECO_USER = {peco username}
+PECO_PASS = {peco password}
 
 # Dates
-# date billing started or when data should generate starting
-START_DATE = 2020-06-01
-EXPORT_METHOD = influxdb
-
-# Influx Settings. 
-INFLUX_HOST = 192.168.1.1 
-INFLUX_PORT = 8086
-INFLUX_USER = {influx user} 
-INFLUX_PASS = {influx passwprd}
-INFLUX_DBNAME = peco 
+DB_TYPE = influxdb
+DB_HOST = 192.168.1.1 
+DB_PORT = 8086
+DB_USER = {influx user} 
+DB_PASS = {influx password}
+DB_DBNAME = peco 
 
 #intervals in hours. How often should it collect data. Peco updates 1x per day, lower than 24 hours is not advised. 
-SCRAPE_INTERVAL = 24 
-SCRAPE_FAIL_INTERVAL = 1
+SLEEP_INTERVAL = 24 
 
 ```
 
