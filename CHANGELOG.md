@@ -1,5 +1,31 @@
 # Changelog
 
+## Unreleased (2021-05-24)
+
+#### New Features
+
+* :wrench: Added feat. to detect if running within container
+* :wrench: Added function to check if running in docker
+* :sparkles: Adding ENV declaration to know if running in docker
+#### Fixes
+
+* :bug: readme file name caps
+#### Performance improvements
+
+* :heavy_plus_sign: Added chromedriver autoinstaller
+#### Refactorings
+
+* :art: Refactored small piece of code
+#### Docs
+
+* :memo: Readded README
+* :pencil2: Fixed git conflicts
+#### Others
+
+* :white_check_mark: Added test for browser
+
+Full set of changes: [`0.6.0...6a1dee4`](https://github.com/breadlysm/peco-usage-collector/compare/0.6.0...6a1dee4)
+
 ## 0.6.0 (2021-05-23)
 
 #### Performance improvements
