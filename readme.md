@@ -1,6 +1,11 @@
 # Peco Assistant
 
-An app that will collects your energy usage data from Peco and exports it to Infux or to a file. 
+If you are a Peco customer, this app will collect the following stats:
+- Energy usage data by hour (rounded (by Peco))
+- Cost of energy by hour (est.)
+- Temperature by hour (est.)
+
+And then stores that data within a database. Currently only InfluxDB is supported. It is best run within a Docker container. 
 
 > :warning: **This was app has gone through a full rewrite as of 5/23/2021. It is a lot leaner, quicker and should be able to access the data regardless of site changes. It has run for several days without problems however there may be unknown bugs. Use at own risk.**
 
@@ -12,11 +17,16 @@ The script will begin collecting data from aeither 2 years ago, or the most rece
 - Peco's site usually runs around a 1-2 days behind realtime. 
 - Not all Peco users may be able to use this based on differences in the meters. 
 - Data seems to update about 1x per day. It is not advised to go below 24 hours for the time_interval. 
-- This is an app that scrapes web pages based on specific page elements. It is very likely that these will change and potentially break the app. 
-  - These should be relatively easy to fix unless it is a site overhaul. I do plan to maintain the functionality. 
+- This app uses selenium to log in to Peco's UI then hits API endpoints to collect the data.  
 ## Configuring and Running Peco Assistant
 Used ENVs for variables as it's what I use in my docker server.
-### Run as a docker container 
+
+### Use 'docker compose'
+Clone the repo to your machine. Within the repo, I've included a `docker-compose.yml`. Edit this to match your information. 
+
+Once updated, open your favorite CLI and run `docker compose up`. The container should start up and start collecting data. 
+### Use 'docker run' 
+
 This builds automatically on Dockerhub so running the container with the needed variables should would. I've only tested in my environment. 
 ```shell
 docker run -e "PECO_USER=replace_me_with_peco_user_email" \
@@ -32,10 +42,12 @@ docker run -e "PECO_USER=replace_me_with_peco_user_email" \
 breadlysm/peco-usage-collector
 ```
 ### Run as python script
-I have a file named ".env" in the root of the directory that looks like for testing. It should work all the same as automated runs. 
+:warning: While the package build and works within the docker containers, the chromedriver is not properly added to path within the python package. This will most likely be fixed. Until then, this option is not functioning. 
 
-Once you've created that file, run the script using 
-`python peco-usage-collector/peco-usage-collector/peco-usage-collector.py
+~~I have a file named ".env" in the root of the directory that looks like for testing. It should work all the same as automated runs.~~
+
+~~Once you've created that file, run the script using 
+`python peco-usage-collector/peco-usage-collector/peco-usage-collector.py~~
 
 ```env
 # User Variables
