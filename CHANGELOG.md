@@ -2,6 +2,14 @@
 
 ## Unreleased (2021-05-24)
 
+#### Fixes
+
+* :bug: Fixed hardcoded time output
+
+Full set of changes: [`0.6.1...cbf091c`](https://github.com/breadlysm/peco-usage-collector/compare/0.6.1...cbf091c)
+
+## 0.6.1 (2021-05-24)
+
 #### New Features
 
 * :wrench: Added feat. to detect if running within container
@@ -24,7 +32,7 @@
 
 * :white_check_mark: Added test for browser
 
-Full set of changes: [`0.6.0...6a1dee4`](https://github.com/breadlysm/peco-usage-collector/compare/0.6.0...6a1dee4)
+Full set of changes: [`0.6.0...0.6.1`](https://github.com/breadlysm/peco-usage-collector/compare/0.6.0...0.6.1)
 
 ## 0.6.0 (2021-05-23)
 
