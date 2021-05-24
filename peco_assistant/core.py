@@ -28,9 +28,9 @@ def main():
                 data = data + usage
             db.influx_write(data)
             last_write = start_date
-            log.info("Usage succesfully collected. Sleeping for 6 hours")
+            log.info(F"Usage succesfully collected. Sleeping for {config['settings']['sleep_hours']} hours")
         else: 
-            log.info("No update needed. Sleeping for 6 hours")
+            log.info(F"No update needed. Sleeping for {config['settings']['sleep_hours']} hours")
         time.sleep(config['settings']['sleep_interval'])
 
 if __name__ == '__main__':
