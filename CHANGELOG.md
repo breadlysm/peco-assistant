@@ -4,9 +4,10 @@
 
 #### Docs
 
+* :memo: Added changelog
 * :memo: Updated config options. Removed fluff
 
-Full set of changes: [`0.5.1...f7d6969`](https://github.com/breadlysm/peco-usage-collector/compare/0.5.1...f7d6969)
+Full set of changes: [`0.5.1...ae00e5f`](https://github.com/breadlysm/peco-usage-collector/compare/0.5.1...ae00e5f)
 
 ## 0.5.1 (2021-05-23)
 
