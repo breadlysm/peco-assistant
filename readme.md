@@ -1,7 +1,8 @@
-# Peco Usage Collector
-
+# Peco Assistant
 
 An app that will collects your energy usage data from Peco and exports it to Infux or to a file. 
+
+> :warning: **This was app has gone through a full rewrite as of 5/23/2021. It is a lot leaner, quicker and should be able to access the data regardless of site changes. It has run for several days without problems however there may be unknown bugs. Use at own risk.**
 
 Peco is an energy provider in Southeast Pennsylvania. Peco is part of Exelon Energy and ooking at their other energy company sites, they look like cut and past copies with different branding. This may very well work in other Northeast US Energy companies sites as is or with slight modifications. I can only confirm this works with Peco though. 
 
@@ -19,14 +20,7 @@ This is setup to continually run. After you run the script the first time, it wi
 - Data seems to update about 1x per day. It is not advised to go below 24 hours for the time_interval. 
 - This is an app that scrapes web pages based on specific page elements. It is very likely that these will change and potentially break the app. 
   - These should be relatively easy to fix unless it is a site overhaul. I do plan to maintain the functionality. 
-
-## Future improvements.
-- Put it in Docker. 
-- Improve logging. It exists, but it's hella noisy. 
-- Peco has a set of temperatures on their dash, I'd like to extract that as well and include it as a measurement within Influx. 
-
-
-## Configuring and Running Peco-usage-collector
+## Configuring and Running Peco Assistant
 Used ENVs for variables as it's what I use in my docker server.
 ### Run as a docker container 
 This builds automatically on Dockerhub so running the container with the needed variables should would. I've only tested in my environment. 

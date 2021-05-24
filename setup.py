@@ -1,11 +1,11 @@
-from peco_spark.version import __version__
+from peco_assistant.version import __version__
 import setuptools
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="peco_spark", # Replace with your own username
+    name="peco_assistant", # Replace with your own username
     version=__version__,
     author="Breadlysm",
     author_email="github@breadlysm.com",
