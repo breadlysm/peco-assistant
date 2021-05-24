@@ -1,19 +1,28 @@
 import confuse
 import os
-from peco_assistant.helpers import log
+from peco_assistant.logs import Log
 from dotenv import load_dotenv
 import chromedriver_autoinstaller
 import subprocess
 
+log = None
 def get_config():
     return env_config()
+
+def is_docker():
+    docker = os.getenv("IS_DOCKER", False)
+    if docker == 'yes':
+        docker = True
+    else:
+        docker = False
+    return docker
 
 def env_config():
     load_dotenv()
     config = {
-        "login": {
-        "email": os.environ.get('PECO_USERNAME'),
-        "password": os.environ.get('PECO_PASSWORD')
+        "peco": {
+            "user": os.getenv("PECO_USER"),
+            "pass": os.getenv("PECO_PASS")
         },
         "database": {
             "type": os.getenv("DB_TYPE","influxdb"),
@@ -23,25 +32,24 @@ def env_config():
             "pass": os.getenv("DB_PASS"),
             "name": os.getenv("DB_NAME")
         },
-        "peco": {
-            "user": os.getenv("PECO_USER"),
-            "pass": os.getenv("PECO_PASS")
-        },
         "settings":{
             "sleep_hours": int(os.getenv("SLEEP_INTERVAL", 24)),
-            "sleep_interval": hours_to_seconds(int(os.getenv("SLEEP_INTERVAL", 6)))
-            
+            "sleep_interval": hours_to_seconds(int(os.getenv("SLEEP_INTERVAL", 24))),
+            "log_level": os.getenv("LOG_TYPE", 'info')
         },
         "passive_settings": {
             "running_in_docker": is_docker()
         }
     }
+
+    return config
+
+def passive_settings():
+    config = get_config()
     if not config['passive_settings']['running_in_docker']:
         log.info("App is not running in Docker. Configuring Chrome Driver.")
         chromedriver_autoinstaller.install()
         log.info("Driver Configured.")
-    return config
-
 class Config(confuse.Configuration):
     def config_dir(self):
         return './'
@@ -59,3 +67,6 @@ def is_docker():
     else:
         docker = False
     return docker
+
+log = Log(get_config())
+passive_settings()

@@ -1,4 +1,5 @@
-from peco_assistant.helpers import Browser, eastern, peco_dates,to_datetime,log, two_years
+from peco_assistant.helpers import Browser, eastern, peco_dates,to_datetime, two_years
+from peco_assistant.config import log
 
 class Account:
 

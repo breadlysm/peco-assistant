@@ -1,4 +1,5 @@
 import pytz
+import logging
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -7,14 +8,12 @@ from selenium import webdriver
 from datetime import datetime, date, timedelta
 from pytz import timezone,utc
 import time
-import logging
-import sys
+
 #import chromedriver_binary
 import os
 
 
 tz = timezone('US/Eastern')
-
 class Browser:
 
     def __init__(self):
@@ -115,47 +114,6 @@ def peco_dates(start,end=datetime.now(utc)):
         days.append(peco_date(day))
         day = add_days(day,1)
     return days
-        
-
-
-log_format = "%(asctime)s [%(levelname)s] %(message)s"
 
 def two_years():
     return datetime.now(utc) - timedelta(days=2*365)
-
-class Log:
-    def info(self,msg):
-        logging.basicConfig(
-            level=logging.INFO,
-            format=log_format,
-            handlers=[
-                #logging.FileHandler("log.log"),
-                logging.StreamHandler(sys.stdout)
-            ]
-        )
-        logging.info(msg)
-
-    def debug(self,msg):
-        logging.basicConfig(
-            level=logging.DEBUG,
-            format=log_format,
-            handlers=[
-                #logging.FileHandler("debug.log"),
-                logging.StreamHandler(sys.stdout)
-            ]
-        )
-        print(msg)
-        logging.debug(msg)
-
-    def error(self,msg):
-        logging.basicConfig(
-            level=logging.ERROR,
-            format=log_format,
-            handlers=[
-                #logging.FileHandler("log.log"),
-                logging.StreamHandler(sys.stdout)
-            ]
-        )
-        logging.error(msg)
-log = Log()
-
