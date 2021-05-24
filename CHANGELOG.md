@@ -1,13 +1,16 @@
 # Changelog
 
-## Unreleased (2021-05-23)
+## 0.6.0 (2021-05-23)
 
+#### Performance improvements
+
+* :art: full rewrite. Old code deleted
 #### Docs
 
 * :memo: Added changelog
 * :memo: Updated config options. Removed fluff
 
-Full set of changes: [`0.5.1...ae00e5f`](https://github.com/breadlysm/peco-usage-collector/compare/0.5.1...ae00e5f)
+Full set of changes: [`0.5.1...0.6.0`](https://github.com/breadlysm/peco-usage-collector/compare/0.5.1...0.6.0)
 
 ## 0.5.1 (2021-05-23)
 
