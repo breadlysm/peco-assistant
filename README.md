@@ -42,12 +42,11 @@ docker run -e "PECO_USER=replace_me_with_peco_user_email" \
 breadlysm/peco-usage-collector
 ```
 ### Run as python script
-:warning: While the package build and works within the docker containers, the chromedriver is not properly added to path within the python package. This will most likely be fixed. Until then, this option is not functioning. 
 
-~~I have a file named ".env" in the root of the directory that looks like for testing. It should work all the same as automated runs.~~
+I have a file named ".env" in the root of the directory that looks like for testing. It should work all the same as automated runs.
 
-~~Once you've created that file, run the script using 
-`python peco-usage-collector/peco-usage-collector/peco-usage-collector.py~~
+Once you've created that file, run the script using 
+`python peco-usage-collector/peco-usage-collector/peco-usage-collector.py
 
 ```env
 # User Variables
