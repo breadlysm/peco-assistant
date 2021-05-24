@@ -29,6 +29,6 @@ setuptools.setup(
         "simplejson",
         "urllib3",
         "pytz",
-        "toml"
-    ],
+        "toml",
+        "chromedriver_autoinstaller"
 )
