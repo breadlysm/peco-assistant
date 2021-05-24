@@ -11,7 +11,8 @@ services:
       - DB_PASS=[db_password]
       - DB_DBNAME=[name_of_db]
       - SLEEP_INTERVAL=24 #In Hours. How often to check for updates. 
-    image: peco_assistant
+      - LOG_TYPE=info
+    image: pecoassistant
     build:
       context: .
       dockerfile: ./Dockerfile

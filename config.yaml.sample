@@ -1,24 +1,20 @@
 # User Variables
 
-appName: PecoUsage
-logLevel: info
+appName: peco-assistant
 author: breadlysm
 
-login:
-  email: user@email.com
-  password: dontuseeasypasswords
-
-dates:
-  start_date:  2018-01-01
+peco:
+  user: user@email.com
+  pass: dontuseeasypasswords
 
 database:
   db_type: influxdb
-  host:  192.168.1.1
-  port:  8086
-  user:  yourusername
-  password:  secondeasiestpassword
-  name:  peco
+  db_host:  192.168.1.1
+  db_port:  8086
+  db_user:  yourusername
+  db_pass:  secondeasiestpassword
+  db_name:  peco
 
-app_settings:
-  interval: 24
-  fail_interval: 1
+settings:
+  sleep_interval: 24
+  log_level: debug

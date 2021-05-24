@@ -17,7 +17,8 @@ The script will begin collecting data from either 2 years ago, or the most recen
 - Peco's site usually runs around a 1-2 days behind realtime. 
 - Not all Peco users may be able to use this based on differences in the meters. 
 - Data seems to update about 1x per day. It is not advised to go below 24 hours for the time_interval. 
-- This app uses selenium to log in to Peco's UI then hits API endpoints to collect the data.  
+- This app uses selenium to log in to Peco's UI then hits API endpoints to collect the data.  \
+- There is debug logging available. Just set log_level to debug
 ## Configuring and Running Peco Assistant
 Used ENVs for variables as it's what I use in my docker server.
 
@@ -39,6 +40,7 @@ docker run -e "PECO_USER=replace_me_with_peco_user_email" \
 -e "DB_PASS=replace_me_with_db_user_pass" \
 -e "DB_DBNAME=peco" \
 -e "SLEEP_INTERVAL=24" \
+-e "LOG_TYPE=info" \
 breadlysm/peco-usage-collector
 ```
 ### Run as python script
@@ -59,10 +61,11 @@ DB_HOST = 192.168.1.1
 DB_PORT = 8086
 DB_USER = {influx user} 
 DB_PASS = {influx password}
-DB_DBNAME = peco 
+DB_DBNAME = peco
 
 #intervals in hours. How often should it collect data. Peco updates 1x per day, lower than 24 hours is not advised. 
 SLEEP_INTERVAL = 24 
+LOG_TYPE = info
 
 ```
 
