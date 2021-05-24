@@ -20,7 +20,7 @@ ENV DISPLAY=:99
 # upgrade pip
 RUN pip install --upgrade pip
 
-# copy and setup peco_spark
+# copy and setup peco_assistant
 WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt 
@@ -28,4 +28,4 @@ COPY . .
 RUN pip install -e ./
 
 # start
-CMD [ "python", "peco_spark/core.py" ]
+CMD [ "python", "peco_assistant/core.py" ]
