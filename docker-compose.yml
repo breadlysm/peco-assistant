@@ -1,6 +1,6 @@
 version: '3.4'
 services:
-  peco_spark:
+  peco_assistant:
     environment:
       - PECO_USER=[peco_email]
       - PECO_PASS=[peco_pass]
@@ -11,7 +11,7 @@ services:
       - DB_PASS=[db_password]
       - DB_DBNAME=[name_of_db]
       - SLEEP_INTERVAL=24 #In Hours. How often to check for updates. 
-    image: peco_spark
+    image: peco_assistant
     build:
       context: .
       dockerfile: ./Dockerfile

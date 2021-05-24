@@ -36,7 +36,7 @@ class Config(confuse.Configuration):
         return './'
 
 def yaml_config():
-    return Config('peco_spark')
+    return Config('peco_assistant')
 
 def hours_to_seconds(hours):
     return hours * 60 * 60
