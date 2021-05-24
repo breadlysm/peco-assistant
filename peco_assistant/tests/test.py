@@ -1,24 +1,20 @@
 from datetime import datetime,timedelta
-from peco_assistant.helpers import peco_dates, to_utc
+from peco_assistant.helpers import peco_dates, to_utc, Browser
 from peco_assistant.core import Account
 from peco_assistant.database import Database
+from peco_assistant.config import get_config
 
-account = Account()
-#data = account.get_data('2021/2/01')
+config = get_config()
 
-x = to_utc(datetime.now() - timedelta(days=10))
-days = peco_dates(start=(x-timedelta(days=220)),end=x)
-data = []
-for i in days:
-    d = account.get_data(i)
-    if d is not None:
-        data = data + d
-# write_data = []
-# for day in data:
-#     for hour in day:
-#         write_data.append(hour)
+def test_browser():
+    browser = Browser()
 
-db = Database()
-print(db.last_write)
-data = db.influx_format(data)
-db.influx_write(data)
+    browser.get('https://google.com')
+    if browser.driver.title == 'Google':
+        return True
+    else:
+        return False
+
+if test_browser():
+    return 0
+
