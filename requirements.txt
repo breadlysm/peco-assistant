@@ -7,3 +7,4 @@ python-dotenv==0.15.0
 toml
 pytz==2020.1
 PyYAML==5.4.1
+chromedriver_autoinstaller
