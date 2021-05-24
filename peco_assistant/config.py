@@ -28,6 +28,7 @@ def env_config():
             "pass": os.getenv("PECO_PASS")
         },
         "settings":{
+            "sleep_hours": int(os.getenv("SLEEP_INTERVAL", 24)),
             "sleep_interval": hours_to_seconds(int(os.getenv("SLEEP_INTERVAL", 6)))
             
         },
