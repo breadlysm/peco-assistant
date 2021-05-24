@@ -1,11 +1,11 @@
-from peco_spark.helpers import Browser, eastern, peco_dates,to_datetime,log, two_years
-from peco_spark.database import Database
-from peco_spark.account import Account
+from peco_assistant.helpers import Browser, eastern, peco_dates,to_datetime,log, two_years
+from peco_assistant.database import Database
+from peco_assistant.account import Account
 #from utils.logger import info, error, debug
 import json
 import time
 import os
-from peco_spark.config import get_config
+from peco_assistant.config import get_config
 
 
 def main():
