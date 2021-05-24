@@ -1,6 +1,9 @@
 import confuse
 import os
+from peco_assistant.helpers import log
 from dotenv import load_dotenv
+import chromedriver_autoinstaller
+import subprocess
 
 def get_config():
     return env_config()
@@ -26,9 +29,16 @@ def env_config():
         },
         "settings":{
             "sleep_interval": hours_to_seconds(int(os.getenv("SLEEP_INTERVAL", 6)))
+            
+        },
+        "passive_settings": {
+            "running_in_docker": is_docker()
         }
     }
-    
+    if not config['passive_settings']['running_in_docker']:
+        log.info("App is not running in Docker. Configuring Chrome Driver.")
+        chromedriver_autoinstaller.install()
+        log.info("Driver Configured.")
     return config
 
 class Config(confuse.Configuration):
@@ -40,3 +50,11 @@ def yaml_config():
 
 def hours_to_seconds(hours):
     return hours * 60 * 60
+
+def is_docker():
+    docker = os.getenv("IS_DOCKER", False)
+    if docker == 'yes':
+        docker = True
+    else:
+        docker = False
+    return docker
