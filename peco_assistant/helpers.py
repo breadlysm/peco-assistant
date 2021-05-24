@@ -12,20 +12,22 @@ import sys
 #import chromedriver_binary
 import os
 
+
 tz = timezone('US/Eastern')
 
 class Browser:
 
     def __init__(self):
-        self.driver = self.get_driver()
         self._driver = None
 
-    def get_driver(self):
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        self._driver = webdriver.Chrome(options=chrome_options)
+    @property
+    def driver(self):
+        if self._driver is None:
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            self._driver = webdriver.Chrome(options=chrome_options)
         return self._driver
     
     def get(self,url):
