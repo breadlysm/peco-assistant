@@ -1,12 +1,22 @@
 # Changelog
 
-## Unreleased (2021-05-24)
+## 0.6.2 (2021-05-24)
 
+#### New Features
+
+* :loud_sound: Adds configurable log level
 #### Fixes
 
 * :bug: Fixed hardcoded time output
+#### Docs
 
-Full set of changes: [`0.6.1...cbf091c`](https://github.com/breadlysm/peco-usage-collector/compare/0.6.1...cbf091c)
+* :memo: Updated sample configs
+#### Others
+
+* :sparkles: Updated to use github containers
+* :white_check_mark: Updated tests to work with pytest
+
+Full set of changes: [`0.6.1...0.6.2`](https://github.com/breadlysm/peco-usage-collector/compare/0.6.1...0.6.2)
 
 ## 0.6.1 (2021-05-24)
 
