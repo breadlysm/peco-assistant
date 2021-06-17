@@ -52,6 +52,7 @@ class Browser:
                     element = None
         return element
 
+
 def to_datetime(str,tz=utc,local_tz=None,fmt="%a, %d %b %Y %H:%M:%S"):
     """Returns datetime object from string
 
@@ -79,6 +80,9 @@ def to_utc(dt,current_tz=eastern()):
     dt = dt.astimezone(utc)
     return dt
 
+def date_to_dt(date):
+    "
+
 
 def get_today():
     today = datetime.now().isoformat()
@@ -89,6 +93,11 @@ def day(timestamp):
 
 def month(timestamp):
     return timestamp.strftime("%m")
+
+
+def month_name(dt):
+    return dt.strftime("%b")
+
 
 def year(timestamp):
     return timestamp.strftime("%Y")
@@ -115,5 +124,30 @@ def peco_dates(start,end=datetime.now(utc)):
         day = add_days(day,1)
     return days
 
+
 def two_years():
     return datetime.now(utc) - timedelta(days=2*365)
+
+
+def date_to_dt(date, fmt='%m/%d/%Y'):
+    return datetime.strptime(date,fmt)
+
+
+def pdf_file_names(dates):
+    paths = []
+    for day in dates:
+        dt = date_to_dt(day)
+        y = year(dt)
+        m = month_name(dt)
+        path = f'peco_assistant/data/invoices/{y}/Peco {m}-{y} Invoice.pdf'
+        paths.append(path)
+    return paths
+
+
+def check_if_exists(pdfs,path='peco_assistant/data/invoices'):
+    to_get_pdfs = []
+    existing_pdfs = [y for x in os.walk(path) for y in glob(os.path.join(x[0], '*.pdf'))]
+    for row in pdfs:
+        if not row in existing_pdfs:
+            to_get_pdfs.append(row)
+    return to_get_pdfs
