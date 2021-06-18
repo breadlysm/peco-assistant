@@ -8,6 +8,7 @@ from selenium import webdriver
 from datetime import datetime, date, timedelta
 from pytz import timezone,utc
 import time
+from base64 import b64decode
 
 #import chromedriver_binary
 import os
@@ -108,6 +109,9 @@ def sub_days(dt,days):
 def peco_date(dt):
     return dt.astimezone(eastern()).strftime("%Y/%-m/%d")
 
+def to_pdf_date(dt):
+    return dt.strftime("%Y-%m-%d")
+
 def peco_dates(start,end=datetime.now(utc)):
     """"returns list of days to get metrics for in peco accepted format
     Args:
@@ -137,15 +141,27 @@ def pdf_file_names(dates):
         y = year(dt)
         m = month_name(dt)
         path = f'peco_assistant/data/invoices/{y}/Peco {m}-{y} Invoice.pdf'
-        paths[day] = path
+        data = (dt, path)
+        paths[day] = data
     paths = check_if_exists(paths)
     return paths
 
 
 def check_if_exists(pdfs,path='peco_assistant/data/invoices'):
-    to_get_pdfs = {}
+    to_get_pdfs = []
     existing_pdfs = [y for x in os.walk(path) for y in glob(os.path.join(x[0], '*.pdf'))]
     for row in pdfs:
-        if not pdfs[row] in existing_pdfs:
-            to_get_pdfs[row] = pdfs[row]
+        dt = pdfs[row][0]
+        path = pdfs[row][1]
+        if not path in existing_pdfs:
+            to_get_pdfs.append((dt, path))
     return to_get_pdfs
+
+
+def b64_to_pdf(b64, path)
+    bytes = b64decode(b64, validate=True)
+
+    # Write the PDF contents to a local file
+    f = open(f'{path}.pdf', 'wb')
+    f.write(bytes)
+    f.close()
