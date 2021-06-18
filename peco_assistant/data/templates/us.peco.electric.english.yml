@@ -1,0 +1,29 @@
+issuer: Peco
+keywords:
+- kWh
+- peco.com
+fields:
+  due_date: Total Amount Due on ([0-9/]{10})\s*\$[0-9.]{4,7}
+  amount:  Total Amount Due on [0-9/]{10}\s*\$([0-9.]{4,7})
+  date: Bill Date.*([0-9/]{10})
+  invoice_number: "Account # ([0-9-]{6,14})"
+  total_kwh: "Total kWh Used: ([0-9,]{0,5})"
+  customer_charge: Customer Charge\s*([0-9.]{0,6})
+  dist_rate: Distribution Charges\s*[0-9,]{0,5} kWh X ([0-9.]{0,8})\s*[0-9.]{0,7}
+  dist_charge: Distribution Charges\s*[0-9,]{0,5} kWh X [0-9.]{0,8}\s*([0-9.]{0,7})
+  dist_improve: Distribution System Improvement\s*([0-9.]{0,6})\s
+  gen_rate: Generation Charges\s*[0-9.]{0,6} kWh X ([0-9.]{0,8})\s*[0-9.]{0,6}
+  gen_charge: Generation Charges\s*[0-9.]{0,6} kWh X [0-9.]{0,8}\s*([0-9.]{0,6})
+  tran_rate: Transmission Charges\s*[0-9.]{0,6} kWh X ([0-9.]{0,8})\s*[0-9.]{0,6}
+  tran_charge: Transmission Charges\s*[0-9.]{0,6} kWh X [0-9.]{0,8}\s*([0-9.]{0,6})
+  tax_fees: State Tax Adjustment\s*([0-9.-]{0,6})
+  total: Total Current Charges\s*\$([0-9.]{0,7})
+  start_date: Service Period ([0-9/]{10}) to [0-9/]{10}
+  end_date: Service Period [0-9/]{10} to ([0-9/]{10})
+  meter_start: Tot kWh\s*([0-9]{0,7}) Actual\s*[0-9]{0,7} Actual
+  meter_end: Tot kWh\s*[0-9]{0,7} Actual\s*([0-9]{0,7}) Actual
+options:
+  remove_whitespace: false
+  currency: USD
+  replace: 
+    - [',','']
