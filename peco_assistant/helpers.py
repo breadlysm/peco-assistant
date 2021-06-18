@@ -80,9 +80,6 @@ def to_utc(dt,current_tz=eastern()):
     dt = dt.astimezone(utc)
     return dt
 
-def date_to_dt(date):
-    "
-
 
 def get_today():
     today = datetime.now().isoformat()
@@ -134,20 +131,21 @@ def date_to_dt(date, fmt='%m/%d/%Y'):
 
 
 def pdf_file_names(dates):
-    paths = []
+    paths = {}
     for day in dates:
         dt = date_to_dt(day)
         y = year(dt)
         m = month_name(dt)
         path = f'peco_assistant/data/invoices/{y}/Peco {m}-{y} Invoice.pdf'
-        paths.append(path)
+        paths[day] = path
+    paths = check_if_exists(paths)
     return paths
 
 
 def check_if_exists(pdfs,path='peco_assistant/data/invoices'):
-    to_get_pdfs = []
+    to_get_pdfs = {}
     existing_pdfs = [y for x in os.walk(path) for y in glob(os.path.join(x[0], '*.pdf'))]
     for row in pdfs:
-        if not row in existing_pdfs:
-            to_get_pdfs.append(row)
+        if not pdfs[row] in existing_pdfs:
+            to_get_pdfs[row] = pdfs[row]
     return to_get_pdfs
