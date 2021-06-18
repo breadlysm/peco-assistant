@@ -14,3 +14,4 @@ __pycache__peco_spark.egg-info/
 *.ipynb
 *.ipynb_checkpoints
 *.png
+*.har
