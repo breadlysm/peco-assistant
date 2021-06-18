@@ -10,3 +10,7 @@ config.yaml
 docker-compose.debug.yml
 *.egg-info
 __pycache__peco_spark.egg-info/
+*.pdf
+*.ipynb
+*.ipynb_checkpoints
+*.png
