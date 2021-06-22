@@ -1,4 +1,4 @@
-# Peco Assistant
+# Peco Assistant <img src='https://user-images.githubusercontent.com/3665468/119727590-78df0c00-be40-11eb-8261-75696a8b6d83.png' width='50'>
 
 If you are a Peco customer, this app will collect the following stats:
 - Energy usage data by hour (rounded (by Peco))
@@ -6,8 +6,6 @@ If you are a Peco customer, this app will collect the following stats:
 - Temperature by hour (est.)
 
 And then stores that data within a database. Currently only InfluxDB is supported. It is best run within a Docker container. 
-
-> :warning: **This was app has gone through a full rewrite as of 5/23/2021. It is a lot leaner, quicker and should be able to access the data regardless of site changes. It has run for several days without problems however there may be unknown bugs. Use at own risk.**
 
 Peco is an energy provider in Southeast Pennsylvania. Peco is part of Exelon Energy and ooking at their other energy company sites, they look like cut and past copies with different branding. This may very well work in other Northeast US Energy companies sites as is or with slight modifications. I can only confirm this works with Peco though. 
 
