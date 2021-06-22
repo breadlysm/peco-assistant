@@ -2,7 +2,6 @@ influxdb==5.3.0
 requests==2.24.0
 selenium==3.141.0
 selenium-wire
-glob
 urllib3==1.25.10
 confuse==1.4.0
 python-dotenv==0.15.0
