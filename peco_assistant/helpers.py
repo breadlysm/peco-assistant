@@ -4,11 +4,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import *
-from selenium import webdriver
+from invoice2data import extract_data
+from invoice2data.extract.loader import read_templates
+from seleniumwire import webdriver
 from datetime import datetime, date, timedelta
+from selenium.webdriver import DesiredCapabilities
 from pytz import timezone,utc
 import time
-from base64 import b64decode
+from base64 import b64decode, b64encode
+from glob import glob
 
 #import chromedriver_binary
 import os
@@ -19,15 +23,28 @@ class Browser:
 
     def __init__(self):
         self._driver = None
+        
+    def options(self):
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        print('chrome options loaded')
+        return chrome_options
+    
+    def scopes(self):
+        scopes = [
+            'https:\/\/secure.peco.com\/.euapi\/mobile\/custom\/auth\/accounts\/[0-9]*\/billing\/[0-9]{4}-[0-9]{2}-[0-9]{2}\/pdf'
+        ]
+        return scopes
 
     @property
     def driver(self):
         if self._driver is None:
-            chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument('--headless')
-            chrome_options.add_argument('--no-sandbox')
-            chrome_options.add_argument('--disable-dev-shm-usage')
-            self._driver = webdriver.Chrome(options=chrome_options)
+            options = self.options()
+            scopes = self.scopes()
+            self._driver = webdriver.Chrome(options=options)
+            self._driver.scopes = scopes
         return self._driver
     
     def get(self,url):
@@ -86,6 +103,9 @@ def get_today():
     today = datetime.now().isoformat()
     return today
 
+def to_unix(dt):
+    return datetime.timestamp(dt)
+
 def day(timestamp):
     return timestamp.strftime("%d")
 
@@ -135,33 +155,55 @@ def date_to_dt(date, fmt='%m/%d/%Y'):
 
 
 def pdf_file_names(dates):
-    paths = {}
+    paths = []
     for day in dates:
         dt = date_to_dt(day)
         y = year(dt)
         m = month_name(dt)
-        path = f'peco_assistant/data/invoices/{y}/Peco {m}-{y} Invoice.pdf'
+        main_path = 'peco_assistant/data/invoices'
+        path = f'{main_path}/{y}/Peco {m}-{y} Invoice.pdf'
         data = (dt, path)
-        paths[day] = data
+        paths.append((dt, path))
+        year_folder = os.path.isdir(f'{main_path}/{y}')
+        if not year_folder:
+            os.makedirs(f'{main_path}/{y}')
     paths = check_if_exists(paths)
     return paths
 
+def local_pdfs(path='peco_assistant/data/invoices'):
+    pdfs = [y for x in os.walk(path) for y in glob(os.path.join(x[0], '*.pdf'))]
+    return pdfs
 
-def check_if_exists(pdfs,path='peco_assistant/data/invoices'):
+
+def check_if_exists(pdfs, path='peco_assistant/data/invoices'):
     to_get_pdfs = []
-    existing_pdfs = [y for x in os.walk(path) for y in glob(os.path.join(x[0], '*.pdf'))]
+    existing_pdfs = local_pdfs(path)
     for row in pdfs:
-        dt = pdfs[row][0]
-        path = pdfs[row][1]
+        dt = row[0]
+        path = row[1]
         if not path in existing_pdfs:
             to_get_pdfs.append((dt, path))
     return to_get_pdfs
 
 
-def b64_to_pdf(b64, path)
+def b64_to_pdf(b64, path):
     bytes = b64decode(b64, validate=True)
 
     # Write the PDF contents to a local file
-    f = open(f'{path}.pdf', 'wb')
+    f = open(path, 'wb')
     f.write(bytes)
     f.close()
+
+
+def pdf_to_b64(pdf_path):
+    with open(pdf_path, "rb") as pdf_file:
+        pdf_string = b64encode(pdf_file.read())
+    pdf_string = pdf_string.decode('utf-8')
+    #pdf_string = pdf_string
+    # Write the PDF contents to a local file
+    return pdf_string
+
+def parse_pdf(pdf_path):
+    templates = read_templates('peco_assistant/data/templates')
+    results = extract_data(pdf_path, templates=templates)
+    return results
