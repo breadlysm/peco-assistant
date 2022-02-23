@@ -1,3 +1,6 @@
+## I have archived this repository as I am no longer a Peco Customer and can no longer test to see if things work. At last run around 9/15/2021, everything was working well. No further updates to this code will happen though. 
+
+
 # Peco Assistant <img src='https://user-images.githubusercontent.com/3665468/119727590-78df0c00-be40-11eb-8261-75696a8b6d83.png' width='50'>
 
 If you are a Peco customer, this app will collect the following stats:
